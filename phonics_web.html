@@ -166,41 +166,31 @@
 <body>
 <div class="container" id="app">
 
-  <!-- Screen: Setup -->
-  <div class="screen active" id="screen-setup">
+  <!-- Screen: Home -->
+  <div class="screen active" id="screen-home">
     <div class="header">
-      <h1>🔤 Phonics Dictation</h1>
-      <p>Spelling practice for children</p>
+      <h1>🔤 Phonics Hub</h1>
+      <p style="font-size:13px;color:#888;margin-top:4px">Learn · Test · Play</p>
     </div>
-    <div class="card">
-      <div class="tag">Choose Level</div>
-      <div id="level-list"></div>
-      <div id="sub-level-card" class="hidden" style="margin-top:8px;padding-top:8px;border-top:1px solid #1e2d4a">
-        <div class="tag" style="margin-bottom:4px">Focus Area</div>
-        <select id="sub-level-select" style="width:100%;padding:10px;background:#0f3460;color:#e0e0e0;border:2px solid #1e2d4a;border-radius:8px;font-size:14px;outline:none">
-          <option value="">All words in this level</option>
-        </select>
-      </div>
+    <div class="home-card" onclick="showScreen('screen-learn')" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:24px;margin-bottom:12px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="font-size:32px;margin-bottom:8px">📖</div>
+      <div style="font-size:20px;font-weight:700;color:#60a5fa">Learn</div>
+      <div style="font-size:13px;color:#888;margin-top:4px">Phonics lessons & curriculum</div>
+      <div style="font-size:11px;color:#666;margin-top:4px">Coming soon</div>
     </div>
-    <div class="card">
-      <div class="tag">Speed Mode</div>
-      <div class="speed-btn" data-speed="normal" onclick="selectSpeed(this)">
-        <div class="label">🔊 Normal</div>
-        <div class="desc">Natural voice, regular speed</div>
-      </div>
-      <div class="speed-btn" data-speed="slow" onclick="selectSpeed(this)">
-        <div class="label">🐢 Slow</div>
-        <div class="desc">Slower, clearer enunciation</div>
-      </div>
-      <div class="speed-btn selected" data-speed="phoneme" onclick="selectSpeed(this)">
-        <div class="label">🔡 Phoneme by Phoneme</div>
-        <div class="desc">Word → sound each letter → word again</div>
-      </div>
+    <div class="home-card" onclick="showScreen('screen-test-hub')" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:24px;margin-bottom:12px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="font-size:32px;margin-bottom:8px">✏️</div>
+      <div style="font-size:20px;font-weight:700;color:#34d399">Test</div>
+      <div style="font-size:13px;color:#888;margin-top:4px">Reading & writing practice</div>
     </div>
-    <button class="btn btn-primary" onclick="startSession()" id="start-btn">Start Dictation</button>
-    <button class="btn btn-ghost" onclick="showCustomTool()" style="margin-top:8px">📖 Word Reader</button>
-    <button class="btn btn-ghost" onclick="showErrorReview()" id="error-review-btn" style="margin-top:4px">📊 Error Review</button>
-    <div id="audio-status" style="text-align:center;margin-top:12px;font-size:13px;color:#666;"></div>
+    <div class="home-card" onclick="showScreen('screen-play-hub')" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:24px;margin-bottom:12px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="font-size:32px;margin-bottom:8px">🎮</div>
+      <div style="font-size:20px;font-weight:700;color:#fbbf24">Play</div>
+      <div style="font-size:13px;color:#888;margin-top:4px">Phonics games & activities</div>
+    </div>
+    <div style="margin-top:12px">
+      <div style="font-size:11px;color:#555;text-align:center">🔊 Voice: Myra · 88 phoneme sounds</div>
+    </div>
   </div>
 
   <!-- Screen: Dictation -->
@@ -313,6 +303,205 @@
     </div>
     <div class="spacer"></div>
     <button class="btn btn-ghost" onclick="backToSetup()">← Back</button>
+  </div>
+
+  <!-- Screen: Learn -->
+  <div class="screen" id="screen-learn">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="showScreen('screen-home')" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Home</button>
+      <div class="header" style="padding-top:4px">
+        <h1>📖 Learn</h1>
+        <p style="font-size:13px;color:#888">Phonics lessons</p>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;padding:40px 20px">
+      <div style="font-size:48px;margin-bottom:12px">📚</div>
+      <div style="font-size:18px;color:#888">Lesson content coming soon</div>
+      <div style="font-size:13px;color:#666;margin-top:8px">Your phonics curriculum videos, PDF worksheets, and structured lesson plans will go here.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showScreen('screen-home')">← Home</button>
+  </div>
+
+  <!-- Screen: Test Hub -->
+  <div class="screen" id="screen-test-hub">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="showScreen('screen-home')" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Home</button>
+      <div class="header" style="padding-top:4px">
+        <h1>✏️ Test</h1>
+        <p style="font-size:13px;color:#888">Reading & writing practice</p>
+      </div>
+    </div>
+    <div class="home-card" onclick="showDictationSetup()" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:20px;margin-bottom:10px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:28px">✍️</div>
+        <div><div style="font-size:17px;font-weight:700;color:#34d399">Writing Test</div>
+        <div style="font-size:12px;color:#888">Spelling dictation · 3 levels · adaptive</div></div>
+      </div>
+    </div>
+    <div class="home-card" onclick="showScreen('screen-reading')" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:20px;margin-bottom:10px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:28px">🎤</div>
+        <div><div style="font-size:17px;font-weight:700;color:#60a5fa">Reading Test</div>
+        <div style="font-size:12px;color:#888">Speak the word · speech recognition</div></div>
+      </div>
+    </div>
+    <button class="btn btn-ghost" onclick="showScreen('screen-home')">← Home</button>
+  </div>
+
+  <!-- Screen: Reading Test -->
+  <div class="screen" id="screen-reading">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="backToTestHub()" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Back</button>
+      <div class="header" style="padding-top:4px">
+        <h1>🎤 Reading Test</h1>
+        <p style="font-size:13px;color:#888">Say the word you hear</p>
+      </div>
+    </div>
+    <div id="reading-setup" class="card">
+      <div class="tag">Choose Level</div>
+      <div id="reading-level-list"></div>
+      <button class="btn btn-primary" onclick="startReadingTest()" style="margin-top:8px">▶ Start Reading Test</button>
+    </div>
+    <div id="reading-content" class="hidden">
+      <div style="text-align:center;padding:20px 0">
+        <div style="font-size:48px;margin-bottom:12px" id="reading-word-display">🔊</div>
+        <button class="play-btn" onclick="playReadingWord()" style="width:70px;height:70px;font-size:30px">▶</button>
+      </div>
+      <div class="card" style="text-align:center">
+        <button class="btn btn-primary" onclick="startReadingRecognition()" id="reading-start-btn">🎤 Start Speaking</button>
+        <div id="reading-status" style="font-size:14px;color:#888;margin-top:8px;min-height:24px"></div>
+        <div id="reading-result" style="font-size:18px;font-weight:600;margin-top:8px;min-height:30px"></div>
+      </div>
+      <div style="text-align:center;font-size:11px;color:#555;margin-top:8px">Works best in Chrome/Edge on mobile</div>
+    </div>
+    <button class="btn btn-ghost" onclick="backToTestHub()">← Back</button>
+  </div>
+
+  <!-- Screen: Play Hub -->
+  <div class="screen" id="screen-play-hub">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="showScreen('screen-home')" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Home</button>
+      <div class="header" style="padding-top:4px">
+        <h1>🎮 Play</h1>
+        <p style="font-size:13px;color:#888">Phonics games</p>
+      </div>
+    </div>
+    <div class="home-card" onclick="startHangman()" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:20px;margin-bottom:10px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:28px">💀</div>
+        <div><div style="font-size:17px;font-weight:700;color:#f87171">Hangman</div>
+        <div style="font-size:12px;color:#888">Guess the word letter by letter</div></div>
+      </div>
+    </div>
+    <div class="home-card" onclick="startBingo()" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:20px;margin-bottom:10px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:28px">🎯</div>
+        <div><div style="font-size:17px;font-weight:700;color:#34d399">Phonics Bingo</div>
+        <div style="font-size:12px;color:#888">Listen & tap the matching word</div></div>
+      </div>
+    </div>
+    <div class="home-card" onclick="startFillBlank()" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:20px;margin-bottom:10px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:28px">⬜</div>
+        <div><div style="font-size:17px;font-weight:700;color:#fbbf24">Fill the Blank</div>
+        <div style="font-size:12px;color:#888">Complete the word with the missing sound</div></div>
+      </div>
+    </div>
+    <div class="home-card" onclick="startBubblePop()" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:20px;margin-bottom:10px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:28px">🫧</div>
+        <div><div style="font-size:17px;font-weight:700;color="#a78bfa">Bubble Pop</div>
+        <div style="font-size:12px;color:#888">Pop the letters in the right order</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen: Hangman -->
+  <div class="screen" id="screen-hangman">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="showScreen('screen-play-hub')" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Games</button>
+      <div class="header" style="padding-top:4px"><h1>💀 Hangman</h1></div>
+    </div>
+    <div id="hangman-setup" class="card">
+      <div class="tag">Choose Level</div>
+      <div id="hangman-level-list"></div>
+      <button class="btn btn-primary" onclick="startHangmanGame()" style="margin-top:8px">▶ Start Game</button>
+    </div>
+    <div id="hangman-game" class="hidden" style="text-align:center">
+      <div id="hangman-drawing" style="font-family:monospace;font-size:16px;color:#888;white-space:pre;padding:10px;background:#0f3460;border-radius:10px;margin-bottom:10px;min-height:100px">    
+    +---+
+        |
+        |
+        |
+        |
+        |
+    =========</div>
+      <div id="hangman-word" style="font-size:32px;font-weight:700;letter-spacing:8px;margin:12px 0;color:#e0e0e0"></div>
+      <div id="hangman-hint" style="font-size:13px;color:#888;margin-bottom:8px">Click a letter to guess</div>
+      <div id="hangman-letters" style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:8px 0"></div>
+      <div id="hangman-phoneme" style="font-size:13px;color:#a78bfa;margin-top:6px;min-height:20px"></div>
+      <button class="btn btn-primary hidden" id="hangman-next" onclick="nextHangman()">➡ Next Word</button>
+    </div>
+    <button class="btn btn-ghost" onclick="showScreen('screen-play-hub')">← Games</button>
+  </div>
+
+  <!-- Screen: Bingo -->
+  <div class="screen" id="screen-bingo">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="showScreen('screen-play-hub')" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Games</button>
+      <div class="header" style="padding-top:4px"><h1>🎯 Phonics Bingo</h1></div>
+    </div>
+    <div id="bingo-setup" class="card">
+      <div class="tag">Choose Level</div>
+      <div id="bingo-level-list"></div>
+      <button class="btn btn-primary" onclick="startBingoGame()" style="margin-top:8px">▶ Start Game</button>
+    </div>
+    <div id="bingo-game" class="hidden">
+      <div id="bingo-score" style="text-align:center;font-size:14px;color:#888;margin-bottom:6px">0 correct</div>
+      <div id="bingo-target" style="text-align:center;font-size:18px;font-weight:700;color:#34d399;margin-bottom:8px;min-height:28px">Tap ▶ to hear a word</div>
+      <div style="text-align:center"><button class="play-btn" onclick="playBingoWord()" style="width:60px;height:60px;font-size:24px">▶</button></div>
+      <div id="bingo-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin:10px 0"></div>
+    </div>
+    <button class="btn btn-ghost" onclick="showScreen('screen-play-hub')">← Games</button>
+  </div>
+
+  <!-- Screen: Fill Blank -->
+  <div class="screen" id="screen-fillblank">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="showScreen('screen-play-hub')" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Games</button>
+      <div class="header" style="padding-top:4px"><h1>⬜ Fill the Blank</h1></div>
+    </div>
+    <div id="fill-setup" class="card">
+      <div class="tag">Choose Level</div>
+      <div id="fill-level-list"></div>
+      <button class="btn btn-primary" onclick="startFillGame()" style="margin-top:8px">▶ Start Game</button>
+    </div>
+    <div id="fill-game" class="hidden" style="text-align:center">
+      <div id="fill-word" style="font-size:36px;font-weight:700;letter-spacing:6px;margin:16px 0;color:#e0e0e0"></div>
+      <div id="fill-options" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px 0"></div>
+      <div id="fill-result" style="font-size:16px;font-weight:600;min-height:24px"></div>
+    </div>
+    <button class="btn btn-ghost" onclick="showScreen('screen-play-hub')">← Games</button>
+  </div>
+
+  <!-- Screen: Bubble Pop -->
+  <div class="screen" id="screen-bubblepop">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="showScreen('screen-play-hub')" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Games</button>
+      <div class="header" style="padding-top:4px"><h1>🫧 Bubble Pop</h1></div>
+    </div>
+    <div id="bubble-setup" class="card">
+      <div class="tag">Choose Level</div>
+      <div id="bubble-level-list"></div>
+      <button class="btn btn-primary" onclick="startBubbleGame()" style="margin-top:8px">▶ Start Game</button>
+    </div>
+    <div id="bubble-game" class="hidden" style="text-align:center">
+      <div id="bubble-word" style="font-size:28px;font-weight:700;color:#e0e0e0;margin:10px 0;min-height:36px"></div>
+      <div style="font-size:13px;color:#888;margin-bottom:8px">Pop the letters in the correct order!</div>
+      <div id="bubble-container" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;min-height:80px;padding:10px;background:#0f3460;border-radius:12px"></div>
+      <div id="bubble-progress" style="font-size:14px;color:#666;margin-top:8px"></div>
+    </div>
+    <button class="btn btn-ghost" onclick="showScreen('screen-play-hub')">← Games</button>
   </div>
 
 </div>
@@ -1009,6 +1198,441 @@ async function showErrorReview() {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+}
+
+// ── Navigation helpers ─────────────────────────────────────────────────
+function showDictationSetup() {
+  showScreen('screen-setup');
+  if (typeof loadLevels === 'function') loadLevels();
+  if (typeof testAudio === 'function') testAudio();
+}
+function backToTestHub() {
+  if (window.readingRec) { try { window.readingRec.abort(); } catch(e) {} }
+  showScreen('screen-test-hub');
+}
+
+// ── Reading Test (Web Speech API) ──────────────────────────────────────
+let readingWords = [];
+let readingIdx = 0;
+let readingCorrect = 0;
+let readingTotal = 0;
+let readingLevel = '1';
+const R_EMOJIS = {'1':'🟢','2':'🟡','3':'🔵','heart':'❤️'};
+const R_COLORS = {'1':'#34d399','2':'#fbbf24','3':'#60a5fa','heart':'#f87171'};
+
+async function initReadingLevels() {
+  try {
+    const resp = await fetch('/api/levels');
+    const data = await resp.json();
+    const list = document.getElementById('reading-level-list');
+    list.innerHTML = '';
+    for (const [k,v] of Object.entries(data)) {
+      const div = document.createElement('div');
+      div.className = 'level-btn' + (k === readingLevel ? ' selected' : '');
+      div.innerHTML = `<div style="display:flex;align-items:center"><span style="font-size:24px;margin-right:10px">${R_EMOJIS[k]||'📘'}</span><div><div class="name" style="color:${R_COLORS[k]||'#888'}">${v.name}</div><div class="subtitle">${v.subtitle}</div></div></div>`;
+      div.onclick = () => {
+        document.querySelectorAll('#reading-level-list .level-btn').forEach(b => b.classList.remove('selected'));
+        div.classList.add('selected'); readingLevel = k;
+      };
+      list.appendChild(div);
+    }
+  } catch(e) {}
+}
+// Override the reading screen display when shown
+document.querySelector('#screen-reading .top-bar .btn')?.addEventListener('click', () => backToTestHub());
+
+document.addEventListener('DOMContentLoaded', () => {
+  initReadingLevels();
+  initGameLevels('hangman');
+  initGameLevels('bingo');
+  initGameLevels('fill');
+  initGameLevels('bubble');
+});
+
+function startReadingTest() {
+  document.getElementById('reading-setup').classList.add('hidden');
+  document.getElementById('reading-content').classList.remove('hidden');
+  readingIdx = 0; readingCorrect = 0; readingTotal = 0;
+  fetchReadingWords();
+}
+async function fetchReadingWords() {
+  try {
+    const resp = await fetch('/api/start', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({level:readingLevel,speed:'normal'})});
+    const data = await resp.json();
+    if (data.session_id) { readingWords.push(data.session_id); }
+    // Fetch first word
+    playReadingWord();
+  } catch(e) { document.getElementById('reading-status').textContent = 'Error loading words'; }
+}
+function playReadingWord() {
+  if (readingWords.length === 0) { return; }
+  fetch('/api/word', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id: readingWords[0]})})
+    .then(r => r.json()).then(d => {
+      readingCurrentWord = d.word;
+      readingTotalPhonemes = d.phoneme_names || [];
+      const player = document.getElementById('audio-player');
+      if (d.tts_url) { player.src = d.tts_url; player.play().catch(()=>{}); }
+    }).catch(()=>{});
+  document.getElementById('reading-status').textContent = '🎤 Tap "Start Speaking" and say the word';
+  document.getElementById('reading-result').textContent = '';
+  document.getElementById('reading-word-display').textContent = '🔊';
+}
+let readingCurrentWord = '';
+let readingTotalPhonemes = [];
+function startReadingRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    document.getElementById('reading-status').textContent = '❌ Speech recognition not available. Use Chrome/Edge.';
+    return;
+  }
+  if (!readingCurrentWord) { document.getElementById('reading-status').textContent = 'Tap ▶ first to hear a word'; return; }
+  const rec = new SpeechRecognition();
+  window.readingRec = rec;
+  rec.lang = 'en-US';
+  rec.interimResults = false;
+  rec.maxAlternatives = 3;
+  document.getElementById('reading-status').textContent = '🎤 Listening...';
+  document.getElementById('reading-start-btn').textContent = '⏳';
+  rec.onresult = (event) => {
+    const attempts = [];
+    for (let i = 0; i < event.results[0].length; i++) {
+      attempts.push(event.results[0][i].transcript.toLowerCase().trim());
+    }
+    const correct = attempts.some(a => a === readingCurrentWord || a.startsWith(readingCurrentWord + ' '));
+    const el = document.getElementById('reading-result');
+    if (correct) {
+      el.style.color = '#34d399';
+      el.textContent = '✅ Correct! ' + readingCurrentWord;
+      // Show phoneme reveal
+      if (readingTotalPhonemes.length) {
+        document.getElementById('reading-word-display').textContent = readingTotalPhonemes.join(' · ');
+      }
+      setTimeout(() => { playReadingWord(); }, 1500);
+    } else {
+      el.style.color = '#f87171';
+      el.textContent = '❌ Heard: "' + attempts[0] + '" — try again';
+    }
+    document.getElementById('reading-status').textContent = '🎤 Tap to say the word';
+    document.getElementById('reading-start-btn').textContent = '🎤 Try Again';
+  };
+  rec.onerror = () => {
+    document.getElementById('reading-status').textContent = '❌ Could not hear clearly. Tap to retry.';
+    document.getElementById('reading-start-btn').textContent = '🎤 Retry';
+  };
+  rec.start();
+}
+
+// ── Game helpers ────────────────────────────────────────────────────────
+function initGameLevels(prefix) {
+  const ids = {hangman:'hangman-level-list',bingo:'bingo-level-list',fill:'fill-level-list',bubble:'bubble-level-list'};
+  const el = document.getElementById(ids[prefix]);
+  if (!el) return;
+  fetch('/api/levels').then(r=>r.json()).then(data => {
+    el.innerHTML = '';
+    for (const [k,v] of Object.entries(data)) {
+      const div = document.createElement('div');
+      div.className = 'level-btn';
+      div.innerHTML = `<div style="display:flex;align-items:center"><span style="font-size:24px;margin-right:10px">${R_EMOJIS[k]||'📘'}</span><div><div class="name" style="color:${R_COLORS[k]||'#888'}">${v.name}</div><div class="subtitle">${v.subtitle}</div></div></div>`;
+      div.dataset.level = k;
+      div.onclick = function() { el.querySelectorAll('.level-btn').forEach(b=>b.classList.remove('selected')); this.classList.add('selected'); };
+      el.appendChild(div);
+    }
+  }).catch(()=>{});
+}
+function getGameLevel(prefix) {
+  const ids = {hangman:'hangman-level-list',bingo:'bingo-level-list',fill:'fill-level-list',bubble:'bubble-level-list'};
+  const sel = document.querySelector(`#${ids[prefix]} .level-btn.selected`);
+  return sel ? sel.dataset.level : '1';
+}
+function shuffleArray(a) { for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+// ── Hangman ─────────────────────────────────────────────────────────────
+let hangmanWords = []; let hangmanIdx = 0; let hangmanWord = ''; let hangmanGuesses = []; let hangmanWrong = 0;
+const HANGMAN_STAGES = [
+  ['    +---+', '        |', '        |', '        |', '        |', '        |', '    ========='].join('\n'),
+  ['    +---+', '    O   |', '        |', '        |', '        |', '        |', '    ========='].join('\n'),
+  ['    +---+', '    O   |', '    |   |', '        |', '        |', '        |', '    ========='].join('\n'),
+  ['    +---+', '    O   |', '   /|   |', '        |', '        |', '        |', '    ========='].join('\n'),
+  ['    +---+', '    O   |', '   /|\\  |', '        |', '        |', '        |', '    ========='].join('\n'),
+  ['    +---+', '    O   |', '   /|\\  |', '   /    |', '        |', '        |', '    ========='].join('\n'),
+  ['    +---+', '    O   |', '   /|\\  |', '   / \\  |', '        |', '        |', '    ========='].join('\n'),
+];
+async function startHangman() {
+  showScreen('screen-hangman');
+  document.getElementById('hangman-setup').classList.remove('hidden');
+  document.getElementById('hangman-game').classList.add('hidden');
+  hangmanWords = []; hangmanIdx = 0;
+}
+async function startHangmanGame() {
+  const level = getGameLevel('hangman');
+  document.getElementById('hangman-setup').classList.add('hidden');
+  document.getElementById('hangman-game').classList.remove('hidden');
+  try {
+    const r = await fetch('/api/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({level,speed:'normal'})});
+    const d = await r.json();
+    if (d.session_id) {
+      hangmanWords = [d.session_id];
+      nextHangman();
+    }
+  } catch(e) { alert('Failed to start'); }
+}
+function nextHangman() {
+  if (hangmanWords.length === 0) { alert('All done!'); return; }
+  document.getElementById('hangman-next').classList.add('hidden');
+  document.getElementById('hangman-phoneme').textContent = '';
+  fetch('/api/word',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:hangmanWords[0]})})
+    .then(r=>r.json()).then(d => {
+      hangmanWord = d.word; hangmanGuesses = []; hangmanWrong = 0;
+      document.getElementById('hangman-drawing').textContent = HANGMAN_STAGES[0];
+      document.getElementById('hangman-hint').textContent = `${d.phoneme_names ? d.phoneme_names.slice(0,2).join(' / ') + '...' : ''} ${d.word.length} letters`;
+      renderHangman();
+      // Play the word once
+      const player = document.getElementById('audio-player');
+      if (d.tts_url) { player.src = d.tts_url; player.play().catch(()=>{}); }
+    }).catch(()=>{});
+}
+function renderHangman() {
+  const display = hangmanWord.split('').map(c => hangmanGuesses.includes(c) ? c : '_').join(' ');
+  document.getElementById('hangman-word').textContent = display;
+  document.getElementById('hangman-drawing').textContent = HANGMAN_STAGES[Math.min(hangmanWrong, 6)];
+  // Letter buttons
+  const abc = 'abcdefghijklmnopqrstuvwxyz'.split('');
+  const container = document.getElementById('hangman-letters');
+  container.innerHTML = '';
+  abc.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-small';
+    btn.textContent = c;
+    btn.style.cssText = 'width:36px;height:36px;padding:0;font-size:14px;border-radius:6px;background:#1e2d4a;color:#e0e0e0;border:1px solid #2a2a4a';
+    if (hangmanGuesses.includes(c)) { 
+      btn.style.background = hangmanWord.includes(c) ? '#059669' : '#4a1a1a'; 
+      btn.style.color = '#888';
+      btn.disabled = true;
+    }
+    btn.onclick = () => guessHangman(c);
+    container.appendChild(btn);
+  });
+  if (!display.includes('_')) {
+    document.getElementById('hangman-phoneme').textContent = '✅ ' + hangmanWord;
+    document.getElementById('hangman-hint').textContent = 'Correct!';
+    document.getElementById('hangman-next').classList.remove('hidden');
+  }
+  if (hangmanWrong >= 6) {
+    document.getElementById('hangman-phoneme').textContent = '💀 The word was: ' + hangmanWord;
+    document.getElementById('hangman-next').classList.remove('hidden');
+  }
+}
+function guessHangman(c) {
+  if (hangmanGuesses.includes(c) || hangmanWrong >= 6) return;
+  hangmanGuesses.push(c);
+  if (!hangmanWord.includes(c)) hangmanWrong++;
+  renderHangman();
+}
+
+// ── Bingo ───────────────────────────────────────────────────────────────
+let bingoWords = []; let bingoGrid = []; let bingoScore = 0; let bingoTarget = '';
+let bingoSid = '';
+async function startBingo() {
+  showScreen('screen-bingo');
+  document.getElementById('bingo-setup').classList.remove('hidden');
+  document.getElementById('bingo-game').classList.add('hidden');
+  bingoWords = []; bingoScore = 0;
+}
+async function startBingoGame() {
+  const level = getGameLevel('bingo');
+  document.getElementById('bingo-setup').classList.add('hidden');
+  document.getElementById('bingo-game').classList.remove('hidden');
+  bingoScore = 0; document.getElementById('bingo-score').textContent = '0 correct';
+  try {
+    const r = await fetch('/api/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({level,speed:'normal'})});
+    const d = await r.json();
+    if (d.session_id) { bingoSid = d.session_id; loadBingoGrid(); }
+  } catch(e) {}
+}
+async function loadBingoGrid() {
+  if (!bingoSid) return;
+  const words = [];
+  for (let i = 0; i < 16; i++) {
+    try {
+      const r = await fetch('/api/word',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:bingoSid})});
+      const d = await r.json();
+      words.push(d.word);
+    } catch(e) { break; }
+  }
+  bingoGrid = shuffleArray(words);
+  const grid = document.getElementById('bingo-grid');
+  grid.innerHTML = '';
+  bingoGrid.forEach(w => {
+    const cell = document.createElement('div');
+    cell.className = 'btn';
+    cell.style.cssText = 'background:#16213e;border:2px solid #1e2d4a;border-radius:8px;padding:12px 6px;font-size:14px;font-weight:600;color:#e0e0e0;text-align:center;cursor:pointer';
+    cell.textContent = w;
+    cell.onclick = function() {
+      if (this.textContent === bingoTarget) {
+        this.style.background = '#059669'; this.style.borderColor = '#34d399'; this.disabled = true;
+        bingoScore++; document.getElementById('bingo-score').textContent = bingoScore + ' correct';
+        document.getElementById('bingo-target').textContent = '✅ Correct!';
+        const player = document.getElementById('audio-player');
+        player.src = '/phonemes/_tada.mp3'; player.play().catch(()=>{});
+        setTimeout(() => { pickBingoWord(); }, 1200);
+      } else {
+        this.style.background = '#4a1a1a'; this.style.borderColor = '#dc2626';
+        setTimeout(() => { this.style.background = '#16213e'; this.style.borderColor = '#1e2d4a'; }, 400);
+      }
+    };
+    grid.appendChild(cell);
+  });
+  pickBingoWord();
+}
+function pickBingoWord() {
+  const remaining = bingoGrid.filter(c => !c.disabled && c.textContent);
+  if (remaining.length === 0) { document.getElementById('bingo-target').textContent = '🎉 Bingo! All done!'; return; }
+  const cell = remaining[Math.floor(Math.random() * remaining.length)];
+  bingoTarget = cell.textContent;
+  document.getElementById('bingo-target').textContent = 'Find: "' + bingoTarget + '"';
+  playBingoWord();
+}
+function playBingoWord() {
+  if (!bingoTarget) return;
+  fetch('/api/speak_custom',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({word:bingoTarget})})
+    .then(r=>r.json()).then(d => {
+      const player = document.getElementById('audio-player');
+      if (d.tts_url) { player.src = d.tts_url; player.play().catch(()=>{}); }
+    }).catch(()=>{});
+}
+
+// ── Fill the Blank ──────────────────────────────────────────────────────
+let fillWords = []; let fillIdx = 0; let fillSid = '';
+let fillCurrentWord = ''; let fillBlankIdx = 0; let fillCorrect = 0; let fillTotal = 0;
+async function startFillBlank() {
+  showScreen('screen-fillblank');
+  document.getElementById('fill-setup').classList.remove('hidden');
+  document.getElementById('fill-game').classList.add('hidden');
+  fillCorrect = 0; fillTotal = 0;
+}
+async function startFillGame() {
+  const level = getGameLevel('fill');
+  document.getElementById('fill-setup').classList.add('hidden');
+  document.getElementById('fill-game').classList.remove('hidden');
+  try {
+    const r = await fetch('/api/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({level,speed:'normal'})});
+    const d = await r.json();
+    if (d.session_id) { fillSid = d.session_id; nextFill(); }
+  } catch(e) {}
+}
+async function nextFill() {
+  if (!fillSid) return;
+  try {
+    const r = await fetch('/api/word',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:fillSid})});
+    const d = await r.json();
+    fillCurrentWord = d.word;
+    fillTotal = d.word.length;
+    fillBlankIdx = Math.floor(Math.random() * d.word.length);
+    const display = d.word.split('').map((c,i) => i === fillBlankIdx ? '___' : c).join(' ');
+    document.getElementById('fill-word').textContent = display;
+    document.getElementById('fill-result').textContent = '';
+    // Generate options (correct letter + 3 distractors)
+    const abc = 'abcdefghijklmnopqrstuvwxyz';
+    const options = new Set([d.word[fillBlankIdx]]);
+    while (options.size < 4) { options.add(abc[Math.floor(Math.random() * 26)]); }
+    const shuffled = shuffleArray([...options]);
+    const container = document.getElementById('fill-options');
+    container.innerHTML = '';
+    shuffled.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.textContent = c;
+      btn.style.cssText = 'width:50px;height:50px;padding:0;font-size:22px;font-weight:700;border-radius:10px;background:#1e2d4a;color:#e0e0e0;border:2px solid #2a2a4a';
+      btn.onclick = function() {
+        if (this.textContent === d.word[fillBlankIdx]) {
+          document.getElementById('fill-result').style.color = '#34d399';
+          document.getElementById('fill-result').textContent = '✅ Correct!';
+          fillCorrect++;
+          setTimeout(() => nextFill(), 1000);
+        } else {
+          document.getElementById('fill-result').style.color = '#f87171';
+          document.getElementById('fill-result').textContent = '❌ Wrong — try again';
+          this.style.background = '#4a1a1a'; this.style.borderColor = '#dc2626';
+          setTimeout(() => { this.style.background = '#1e2d4a'; this.style.borderColor = '#2a2a4a'; }, 600);
+        }
+      };
+      container.appendChild(btn);
+    });
+    // Play the word
+    if (d.tts_url) { const player = document.getElementById('audio-player'); player.src = d.tts_url; player.play().catch(()=>{}); }
+  } catch(e) {}
+}
+
+// ── Bubble Pop ──────────────────────────────────────────────────────────
+let bubbleWord = ''; let bubbleLetters = []; let bubbleIdx = 0; let bubbleCorrect = 0; let bubbleTotal = 0;
+let bubbleSid = '';
+async function startBubblePop() {
+  showScreen('screen-bubblepop');
+  document.getElementById('bubble-setup').classList.remove('hidden');
+  document.getElementById('bubble-game').classList.add('hidden');
+  bubbleCorrect = 0; bubbleTotal = 0;
+}
+async function startBubbleGame() {
+  const level = getGameLevel('bubble');
+  document.getElementById('bubble-setup').classList.add('hidden');
+  document.getElementById('bubble-game').classList.remove('hidden');
+  try {
+    const r = await fetch('/api/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({level,speed:'normal'})});
+    const d = await r.json();
+    if (d.session_id) { bubbleSid = d.session_id; nextBubble(); }
+  } catch(e) {}
+}
+async function nextBubble() {
+  if (!bubbleSid) return;
+  try {
+    const r = await fetch('/api/word',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:bubbleSid})});
+    const d = await r.json();
+    bubbleWord = d.word; bubbleIdx = 0;
+    bubbleTotal = d.word.length;
+    document.getElementById('bubble-word').textContent = d.word;
+    // Create shuffled letters
+    bubbleLetters = d.word.split('').map((c,i) => ({char:c, idx:i, popped:false}));
+    shuffleArray(bubbleLetters);
+    renderBubble();
+    // Play the word
+    if (d.tts_url) { const player = document.getElementById('audio-player'); player.src = d.tts_url; player.play().catch(()=>{}); }
+  } catch(e) {}
+}
+function renderBubble() {
+  const container = document.getElementById('bubble-container');
+  container.innerHTML = '';
+  let remaining = 0;
+  bubbleLetters.forEach(l => {
+    if (l.popped) return;
+    remaining++;
+    const bubble = document.createElement('div');
+    bubble.textContent = l.char;
+    bubble.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-size:24px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(124,58,237,0.3);transition:all 0.15s';
+    bubble.onclick = function() {
+      if (l.idx === bubbleIdx) {
+        l.popped = true;
+        bubbleIdx++;
+        this.style.transform = 'scale(1.5)'; this.style.opacity = '0';
+        setTimeout(() => renderBubble(), 200);
+        if (bubbleIdx >= bubbleTotal) {
+          bubbleCorrect++;
+          document.getElementById('bubble-progress').textContent = '✅ ' + bubbleWord;
+          const player = document.getElementById('audio-player');
+          player.src = '/phonemes/_tada.mp3'; player.play().catch(()=>{});
+          setTimeout(() => nextBubble(), 1200);
+        } else {
+          document.getElementById('bubble-progress').textContent = `${bubbleIdx}/${bubbleTotal} correct`;
+        }
+      } else {
+        this.style.transform = 'scale(0.8)'; this.style.background = '#dc2626';
+        setTimeout(() => { this.style.transform = 'scale(1)'; this.style.background = 'linear-gradient(135deg,#7c3aed,#a78bfa)'; }, 300);
+      }
+    };
+    container.appendChild(bubble);
+  });
+  if (remaining === 0) {
+    document.getElementById('bubble-progress').textContent = '✅ Done! ' + bubbleWord;
+  }
 }
 
 // ── Keyboard helper ───────────────────────────────────────────────────
