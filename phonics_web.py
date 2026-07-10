@@ -1099,6 +1099,67 @@ def api_audio_test():
     })
 
 
+# ── Minimal Pairs ────────────────────────────────────────────────────────────
+
+SHORT_VOWEL_PAIRS = [
+    ("cat","cot"),("bat","bot"),("hat","hot"),("mat","mop"),("pat","pot"),
+    ("pen","pin"),("bet","bit"),("set","sit"),("met","mitt"),("ten","tin"),
+    ("pit","pot"),("bit","but"),("sit","sat"),("hit","hat"),("lip","lap"),
+    ("cup","cap"),("cut","cat"),("run","ran"),("sun","sin"),("fun","fan"),
+    ("sock","sack"),("lock","lack"),("rock","rack"),("dock","duck"),
+    ("bed","bad"),("red","rad"),("fed","fad"),("led","lad"),
+    ("big","beg"),("dig","dog"),("pig","peg"),("wig","wag"),
+    ("hot","hut"),("pot","put"),("pop","pup"),("mop","map"),
+    ("nut","net"),("cut","kit"),("hug","hog"),("bug","bag"),
+    ("tap","top"),("nap","nip"),("map","mop"),("gap","gup"),
+    ("thin","tin"),("shin","sin"),("chip","ship"),("chop","shop"),
+]
+
+CHINESE_ERROR_PAIRS = [
+    ("thin","sin"),("thick","sick"),("think","sink"),("thank","sank"),
+    ("three","free"),("threw","frew"),("thread","fred"),
+    ("bath","bas"),("mouth","mouse"),("teeth","tease"),
+    ("three","free"),("thirst","first"),("throw","fro"),
+    ("very","wary"),("vine","wine"),("vest","west"),("vet","wet"),
+    ("van","wan"),("veil","wail"),
+    ("night","light"),("nine","line"),("name","lame"),("need","lead"),
+    ("nice","lice"),("knee","lee"),("knock","lock"),
+    ("light","right"),("long","wrong"),("late","rate"),("low","row"),
+    ("lead","read"),("lace","race"),("lake","rake"),
+    ("lice","rice"),("lime","rime"),("load","road"),
+    ("ship","sheep"),("chip","cheap"),("full","fool"),("pull","pool"),
+    ("bed","bad"),("head","had"),("walk","work"),
+]
+
+MINIMAL_PAIR_CATEGORIES = {
+    "short-vowels": {"name": "Short Vowels", "desc": "CVC words with different vowels", "pairs": SHORT_VOWEL_PAIRS},
+    "th-s": {"name": "th vs s", "desc": "Common TH/S confusion", "pairs": [(a,b) for a,b in CHINESE_ERROR_PAIRS if 'th' in a.lower() or 'th' in b.lower()]},
+    "th-f": {"name": "th vs f", "desc": "Common TH/F confusion", "pairs": [(a,b) for a,b in CHINESE_ERROR_PAIRS if a.startswith('th') and b.startswith('f')]},
+    "v-w": {"name": "v vs w", "desc": "Common V/W confusion", "pairs": [(a,b) for a,b in CHINESE_ERROR_PAIRS if ('v' in a.lower() and 'w' in b.lower()) or ('w' in a.lower() and 'v' in b.lower())]},
+    "n-l": {"name": "n vs l", "desc": "Common N/L confusion", "pairs": [(a,b) for a,b in CHINESE_ERROR_PAIRS if ('n' in a.lower() and 'l' in b.lower()) or ('l' in a.lower() and 'n' in b.lower())]},
+    "l-r": {"name": "l vs r", "desc": "Common L/R confusion", "pairs": [(a,b) for a,b in CHINESE_ERROR_PAIRS if ('l' in a.lower() and 'r' in b.lower()) or ('r' in a.lower() and 'l' in b.lower())]},
+}
+
+
+@app.route("/api/minimal_pairs")
+def api_minimal_pairs():
+    cats = {}
+    for k, v in MINIMAL_PAIR_CATEGORIES.items():
+        cats[k] = {"name": v["name"], "desc": v["desc"], "count": len(v["pairs"])}
+    return jsonify(cats)
+
+
+@app.route("/api/minimal_pairs/<category>")
+def api_minimal_pairs_category(category):
+    cat = MINIMAL_PAIR_CATEGORIES.get(category)
+    if not cat:
+        return jsonify({"error": "Category not found"}), 404
+    import random
+    pairs = list(cat["pairs"])
+    random.shuffle(pairs)
+    return jsonify({"name": cat["name"], "pairs": pairs[:20]})
+
+
 # ── Main ───────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

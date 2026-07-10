@@ -319,6 +319,13 @@
       <div style="font-size:18px;color:#888">Lesson content coming soon</div>
       <div style="font-size:13px;color:#666;margin-top:8px">Your phonics curriculum videos, PDF worksheets, and structured lesson plans will go here.</div>
     </div>
+    <div class="home-card" onclick="showMinimalPairs('learn')" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:20px;margin-bottom:10px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:28px">🔊</div>
+        <div><div style="font-size:17px;font-weight:700;color:#a78bfa">Minimal Pairs</div>
+        <div style="font-size:12px;color:#888">Compare similar sounds · CVC & common errors</div></div>
+      </div>
+    </div>
     <button class="btn btn-ghost" onclick="showScreen('screen-home')">← Home</button>
   </div>
 
@@ -345,6 +352,13 @@
         <div style="font-size:12px;color:#888">Speak the word · speech recognition</div></div>
       </div>
     </div>
+    <div class="home-card" onclick="showMinimalPairs('test')" style="background:linear-gradient(135deg,#1e2d4a,#16213e);border-radius:14px;padding:20px;margin-bottom:10px;border:1px solid #2a3a5a;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:28px">👂</div>
+        <div><div style="font-size:17px;font-weight:700;color:#fbbf24">Minimal Pairs Test</div>
+        <div style="font-size:12px;color:#888">Hear a word · pick the correct one</div></div>
+      </div>
+    </div>
     <button class="btn btn-ghost" onclick="showScreen('screen-home')">← Home</button>
   </div>
 
@@ -365,16 +379,16 @@
     <div id="reading-content" class="hidden">
       <div style="text-align:center;padding:20px 0">
         <div id="reading-word-display" style="font-size:42px;font-weight:700;color:#e0e0e0;min-height:50px;letter-spacing:4px">—</div>
-        <div style="font-size:13px;color:#888;margin-top:6px">Read this word aloud</div>
+        <div style="font-size:13px;color:#888;margin-top:6px" id="reading-subtext">Read this word aloud</div>
       </div>
       <div class="card" style="text-align:center">
         <button class="btn btn-primary" onclick="startReadingRecognition()" id="reading-start-btn">🎤 Start Speaking</button>
         <div id="reading-status" style="font-size:14px;color:#888;margin-top:8px;min-height:24px"></div>
         <div id="reading-result" style="font-size:18px;font-weight:600;margin-top:8px;min-height:30px"></div>
       </div>
-      <div class="card hidden" id="reading-reveal" style="margin-top:8px">
-        <div style="font-size:13px;color:#a78bfa">Phonemes:</div>
-        <div id="reading-phonemes" style="font-size:16px;color:#a78bfa"></div>
+      <div id="reading-phoneme-area" class="card hidden" style="margin-top:8px">
+        <div style="font-size:13px;color:#888;margin-bottom:6px">🔊 Tap each box to hear the sound:</div>
+        <div id="reading-phoneme-boxes" style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px"></div>
       </div>
     </div>
     <button class="btn btn-ghost" onclick="backToTestHub()">← Back</button>
@@ -505,6 +519,37 @@
       <div id="bubble-progress" style="font-size:14px;color:#666;margin-top:8px"></div>
     </div>
     <button class="btn btn-ghost" onclick="showScreen('screen-play-hub')">← Games</button>
+  <!-- Screen: Minimal Pairs -->
+  <div class="screen" id="screen-minimal">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="backFromMinimalPairs()" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Back</button>
+      <div class="header" style="padding-top:4px">
+        <h1>🔊 Minimal Pairs</h1>
+        <p style="font-size:13px;color:#888">Compare similar sounds</p>
+      </div>
+    </div>
+    <div id="minimal-categories" class="card">
+      <div class="tag">Choose Category</div>
+      <div id="minimal-cat-list"></div>
+    </div>
+    <div id="minimal-practice" class="hidden">
+      <div style="text-align:center;padding:10px 0">
+        <div style="font-size:32px;font-weight:700;color:#e0e0e0;min-height:40px" id="minimal-word-a"></div>
+        <div style="font-size:13px;color:#888;margin:4px 0">vs</div>
+        <div style="font-size:32px;font-weight:700;color:#e0e0e0;min-height:40px" id="minimal-word-b"></div>
+      </div>
+      <div style="text-align:center;margin:8px 0">
+        <button class="play-btn" onclick="playMinimalPair()" style="width:60px;height:60px;font-size:24px">▶</button>
+        <div style="font-size:13px;color:#888;margin-top:4px" id="minimal-hint">Tap ▶ to hear one of these words</div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;margin:8px 0">
+        <button class="btn btn-primary" onclick="guessMinimalPair(1)" style="flex:1" id="minimal-btn-a">🔊 Word A</button>
+        <button class="btn btn-primary" onclick="guessMinimalPair(2)" style="flex:1" id="minimal-btn-b">🔊 Word B</button>
+      </div>
+      <div id="minimal-result" style="text-align:center;font-size:18px;font-weight:600;min-height:28px"></div>
+      <div id="minimal-score" style="text-align:center;font-size:13px;color:#888;margin-top:6px">0/0 correct</div>
+    </div>
+    <button class="btn btn-ghost" onclick="backFromMinimalPairs()">← Back</button>
   </div>
 
 </div>
@@ -1268,18 +1313,27 @@ async function fetchReadingWords() {
   } catch(e) { document.getElementById('reading-status').textContent = 'Error loading words'; }
 }
 let readingSid = '';
+let readingLog = []; // track all attempts
 function showReadingWord() {
-  if (!readingSid) { document.getElementById('reading-word-display').textContent = '✅ All done!'; return; }
+  if (!readingSid) { 
+    document.getElementById('reading-word-display').textContent = '✅ Session complete!';
+    document.getElementById('reading-subtext').textContent = readingLog.length + ' words practiced';
+    document.getElementById('reading-phoneme-area').classList.add('hidden');
+    document.getElementById('reading-start-btn').textContent = '🎤 Back';
+    document.getElementById('reading-start-btn').onclick = () => backToTestHub();
+    return; 
+  }
+  document.getElementById('reading-phoneme-area').classList.add('hidden');
+  document.getElementById('reading-result').textContent = '';
+  document.getElementById('reading-start-btn').textContent = '🎤 Start Speaking';
+  document.getElementById('reading-start-btn').onclick = startReadingRecognition;
   fetch('/api/word', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id: readingSid})})
     .then(r => r.json()).then(d => {
       readingCurrentWord = d.word;
       readingTotalPhonemes = d.phoneme_names || [];
       document.getElementById('reading-word-display').textContent = d.word;
-      document.getElementById('reading-reveal').classList.add('hidden');
+      document.getElementById('reading-status').textContent = 'Read the word aloud, then tap 🎤';
     }).catch(()=>{});
-  document.getElementById('reading-status').textContent = '🎤 Read the word aloud, then tap "Start Speaking"';
-  document.getElementById('reading-result').textContent = '';
-  document.getElementById('reading-start-btn').textContent = '🎤 Start Speaking';
 }
 let readingCurrentWord = '';
 let readingTotalPhonemes = [];
@@ -1289,7 +1343,7 @@ function startReadingRecognition() {
     document.getElementById('reading-status').textContent = '❌ Speech recognition not available. Use Chrome/Edge.';
     return;
   }
-  if (!readingCurrentWord) { document.getElementById('reading-status').textContent = 'Tap ▶ first to hear a word'; return; }
+  if (!readingCurrentWord) { document.getElementById('reading-status').textContent = 'Loading word...'; return; }
   const rec = new SpeechRecognition();
   window.readingRec = rec;
   rec.lang = 'en-US';
@@ -1303,28 +1357,80 @@ function startReadingRecognition() {
       attempts.push(event.results[0][i].transcript.toLowerCase().trim());
     }
     const correct = attempts.some(a => a === readingCurrentWord || a.startsWith(readingCurrentWord + ' '));
+    // Log
+    readingLog.push({word: readingCurrentWord, correct: correct, attempts: attempts.slice(0,3)});
     const el = document.getElementById('reading-result');
     if (correct) {
       el.style.color = '#34d399';
-      el.textContent = '✅ Correct! Reading: "' + readingCurrentWord + '"';
-      // Show phoneme reveal
-      document.getElementById('reading-reveal').classList.remove('hidden');
-      if (readingTotalPhonemes.length) {
-        document.getElementById('reading-phonemes').textContent = readingTotalPhonemes.join(' · ');
-      }
-      setTimeout(() => { showReadingWord(); }, 1500);
+      el.textContent = '✅ Correct!';
+      document.getElementById('reading-phoneme-area').classList.add('hidden');
+      document.getElementById('reading-status').textContent = 'Well done!';
+      // Play tada and auto-advance
+      const player = document.getElementById('audio-player');
+      player.src = '/phonemes/_tada.mp3'; player.play().catch(()=>{});
+      setTimeout(() => { showReadingWord(); }, 1200);
     } else {
       el.style.color = '#f87171';
-      el.textContent = '❌ Heard: "' + attempts[0] + '" — try again';
+      el.textContent = '❌ Heard: "' + attempts[0] + '"';
+      document.getElementById('reading-status').textContent = 'Tap the boxes to hear each sound, then try again';
+      document.getElementById('reading-start-btn').textContent = '🎤 Try Again';
+      // Show phoneme boxes
+      showReadingPhonemeBoxes(readingCurrentWord);
     }
-    document.getElementById('reading-status').textContent = '🎤 Tap to say the word';
-    document.getElementById('reading-start-btn').textContent = '🎤 Try Again';
   };
   rec.onerror = () => {
-    document.getElementById('reading-status').textContent = '❌ Could not hear clearly. Tap to retry.';
+    document.getElementById('reading-status').textContent = 'Could not hear clearly. Tap to retry.';
     document.getElementById('reading-start-btn').textContent = '🎤 Retry';
   };
   rec.start();
+}
+async function showReadingPhonemeBoxes(word) {
+  const area = document.getElementById('reading-phoneme-area');
+  area.classList.remove('hidden');
+  const container = document.getElementById('reading-phoneme-boxes');
+  container.innerHTML = '<div style="color:#666">Loading...</div>';
+  try {
+    const r = await fetch('/api/speak_custom',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({word})});
+    const d = await r.json();
+    container.innerHTML = '';
+    if (d.phoneme_graphemes && d.phoneme_audios) {
+      d.phoneme_graphemes.forEach((g, i) => {
+        const box = document.createElement('div');
+        box.style.cssText = 'display:inline-flex;flex-direction:column;align-items:center;background:#1e2d4a;border-radius:10px;padding:10px 16px;cursor:pointer;border:2px solid #2a2a4a;min-width:44px;transition:all 0.15s';
+        const ipa = document.createElement('div');
+        ipa.style.cssText = 'font-size:11px;color:#a78bfa';
+        ipa.textContent = '/' + (d.phoneme_ipa ? d.phoneme_ipa[i] : d.phoneme_names[i]) + '/';
+        const letter = document.createElement('div');
+        letter.style.cssText = 'font-size:22px;font-weight:700;color:#e0e0e0';
+        letter.textContent = g;
+        box.appendChild(ipa);
+        box.appendChild(letter);
+        if (d.phoneme_audios[i]) {
+          box.onclick = () => {
+            const p = document.getElementById('audio-player');
+            p.src = d.phoneme_audios[i]; p.play().catch(()=>{});
+            box.style.borderColor = '#7c3aed';
+            setTimeout(() => { box.style.borderColor = '#2a2a4a'; }, 400);
+          };
+        }
+        container.appendChild(box);
+      });
+    }
+    // Also show the slow TTS hint button
+    if (d.tts_slow_url) {
+      const hintBtn = document.createElement('button');
+      hintBtn.className = 'btn btn-ghost';
+      hintBtn.textContent = '🐢 Hear it slowly';
+      hintBtn.style.cssText = 'width:100%;margin-top:8px;font-size:13px';
+      hintBtn.onclick = () => {
+        const p = document.getElementById('audio-player');
+        p.src = d.tts_slow_url; p.play().catch(()=>{});
+      };
+      container.appendChild(hintBtn);
+    }
+  } catch(e) {
+    container.innerHTML = '<div style="color:#f87171">Could not load phonemes</div>';
+  }
 }
 
 // ── Game helpers ────────────────────────────────────────────────────────
@@ -1637,6 +1743,181 @@ function renderBubble() {
   });
   if (remaining === 0) {
     document.getElementById('bubble-progress').textContent = '✅ Done! ' + bubbleWord;
+  }
+}
+
+// ── Minimal Pairs ──────────────────────────────────────────────────────
+let minimalPairs = [];
+let minimalIdx = 0;
+let minimalCorrect = 0;
+let minimalTotal = 0;
+let minimalTarget = 0; // 0=first, 1=second
+let minimalOrigin = 'learn'; // 'learn', 'test', or 'play'
+let minimalCategory = 'short-vowels';
+
+function showMinimalPairs(origin) {
+  minimalOrigin = origin;
+  showScreen('screen-minimal');
+  document.getElementById('minimal-categories').classList.remove('hidden');
+  document.getElementById('minimal-practice').classList.add('hidden');
+  document.getElementById('minimal-cat-list').innerHTML = 'Loading...';
+  fetch('/api/minimal_pairs').then(r=>r.json()).then(data => {
+    const list = document.getElementById('minimal-cat-list');
+    list.innerHTML = '';
+    const emojis = {'short-vowels':'🟢','th-s':'🔊','th-f':'🔊','v-w':'🔊','n-l':'🔊','l-r':'🔊'};
+    const colors = {'short-vowels':'#34d399','th-s':'#fbbf24','th-f':'#f87171','v-w':'#60a5fa','n-l':'#a78bfa','l-r':'#f472b6'};
+    for (const [k,v] of Object.entries(data)) {
+      const div = document.createElement('div');
+      div.className = 'level-btn';
+      div.innerHTML = `<div style="display:flex;align-items:center"><span style="font-size:24px;margin-right:10px">${emojis[k]||'🔊'}</span><div><div class="name" style="color:${colors[k]||'#888'}">${v.name}</div><div class="subtitle">${v.desc}</div><div class="count">${v.count} pairs</div></div></div>`;
+      div.onclick = () => {
+        list.querySelectorAll('.level-btn').forEach(b=>b.classList.remove('selected'));
+        div.classList.add('selected');
+        if (origin === 'learn') {
+          // In learn mode, show pairs and play them
+          loadMinimalPairs(k);
+        } else {
+          // In test/play mode, start the game
+          startMinimalTest(k);
+        }
+      };
+      list.appendChild(div);
+    }
+  }).catch(()=>{list.innerHTML='<div style="color:#f87171">Failed to load</div>'});
+}
+
+function backFromMinimalPairs() {
+  if (minimalOrigin === 'learn') showScreen('screen-learn');
+  else if (minimalOrigin === 'test') showScreen('screen-test-hub');
+  else showScreen('screen-play-hub');
+}
+
+async function loadMinimalPairs(cat) {
+  minimalCategory = cat;
+  try {
+    const r = await fetch('/api/minimal_pairs/' + cat);
+    const d = await r.json();
+    if (!d.pairs || !d.pairs.length) return;
+    document.getElementById('minimal-categories').classList.add('hidden');
+    document.getElementById('minimal-practice').classList.remove('hidden');
+    minimalIdx = 0;
+    minimalPairs = d.pairs;
+    showMinimalPairLearn();
+  } catch(e) {}
+}
+
+function showMinimalPairLearn() {
+  if (minimalIdx >= minimalPairs.length) {
+    document.getElementById('minimal-word-a').textContent = '✅ All pairs done!';
+    document.getElementById('minimal-word-b').textContent = '';
+    document.getElementById('minimal-hint').textContent = '';
+    return;
+  }
+  const [a, b] = minimalPairs[minimalIdx];
+  document.getElementById('minimal-word-a').textContent = a;
+  document.getElementById('minimal-word-b').textContent = b;
+  document.getElementById('minimal-result').textContent = '';
+  document.getElementById('minimal-hint').textContent = 'Pair ' + (minimalIdx + 1) + ' of ' + minimalPairs.length + ' — tap ▶ to hear each word';
+  document.getElementById('minimal-score').textContent = '';
+  document.getElementById('minimal-btn-a').textContent = '🔊 ' + a;
+  document.getElementById('minimal-btn-b').textContent = '🔊 ' + b;
+  document.getElementById('minimal-btn-a').className = 'btn btn-primary';
+  document.getElementById('minimal-btn-b').className = 'btn btn-primary';
+  minimalTarget = 0;
+  // Play both words in learn mode
+  playMinimalPairWord(a);
+  setTimeout(() => playMinimalPairWord(b), 1200);
+  // Auto-advance after 4s
+  setTimeout(() => {
+    minimalIdx++;
+    if (minimalIdx < minimalPairs.length) showMinimalPairLearn();
+    else showMinimalPairLearn(); // triggers "all done"
+  }, 4000);
+}
+
+let minimalTestPairs = [];
+let minimalTestIdx = 0;
+let minimalTestCorrect = 0;
+let minimalTestTotal = 0;
+let minimalCurrentTarget = null;
+
+async function startMinimalTest(cat) {
+  minimalCategory = cat;
+  try {
+    const r = await fetch('/api/minimal_pairs/' + cat);
+    const d = await r.json();
+    if (!d.pairs || !d.pairs.length) return;
+    document.getElementById('minimal-categories').classList.add('hidden');
+    document.getElementById('minimal-practice').classList.remove('hidden');
+    minimalTestPairs = d.pairs;
+    minimalTestIdx = 0;
+    minimalTestCorrect = 0;
+    minimalTestTotal = 0;
+    showMinimalTest();
+  } catch(e) {}
+}
+
+function showMinimalTest() {
+  if (minimalTestIdx >= minimalTestPairs.length) {
+    document.getElementById('minimal-word-a').textContent = '🎉 Done!';
+    document.getElementById('minimal-word-b').textContent = minimalTestCorrect + '/' + minimalTestTotal + ' correct';
+    document.getElementById('minimal-hint').textContent = '';
+    document.getElementById('minimal-btn-a').className = 'btn btn-ghost';
+    document.getElementById('minimal-btn-b').className = 'btn btn-ghost';
+    document.getElementById('minimal-result').textContent = '';
+    return;
+  }
+  const [a, b] = minimalTestPairs[minimalTestIdx];
+  document.getElementById('minimal-word-a').textContent = a;
+  document.getElementById('minimal-word-b').textContent = b;
+  document.getElementById('minimal-result').textContent = '';
+  document.getElementById('minimal-btn-a').textContent = '🔊 ' + a;
+  document.getElementById('minimal-btn-b').textContent = '🔊 ' + b;
+  document.getElementById('minimal-btn-a').className = 'btn btn-primary';
+  document.getElementById('minimal-btn-b').className = 'btn btn-primary';
+  document.getElementById('minimal-btn-a').disabled = false;
+  document.getElementById('minimal-btn-b').disabled = false;
+  document.getElementById('minimal-score').textContent = minimalTestCorrect + '/' + minimalTestTotal + ' correct';
+  // Pick random word to play
+  minimalCurrentTarget = Math.random() < 0.5 ? 1 : 2;
+  const targetWord = minimalCurrentTarget === 1 ? a : b;
+  document.getElementById('minimal-hint').textContent = 'Tap ▶ to hear the word, then pick A or B';
+  playMinimalPairWord(targetWord);
+}
+
+function playMinimalPair() {
+  const [a, b] = minimalTestPairs[minimalTestIdx] || ['',''];
+  const targetWord = minimalCurrentTarget === 1 ? a : b;
+  playMinimalPairWord(targetWord);
+}
+
+let wordATimer = null;
+
+function playMinimalPairWord(word) {
+  if (!word) return;
+  fetch('/api/speak_custom',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({word})})
+    .then(r=>r.json()).then(d => {
+      const player = document.getElementById('audio-player');
+      if (d.tts_url) { player.src = d.tts_url; player.play().catch(()=>{}); }
+    }).catch(()=>{});
+}
+
+function guessMinimalPair(choice) {
+  const [a, b] = minimalTestPairs[minimalTestIdx] || ['',''];
+  const el = document.getElementById('minimal-result');
+  minimalTestTotal++;
+  if (choice === minimalCurrentTarget) {
+    el.style.color = '#34d399';
+    el.textContent = '✅ Correct!';
+    minimalTestCorrect++;
+    document.getElementById('minimal-score').textContent = minimalTestCorrect + '/' + minimalTestTotal + ' correct';
+    const player = document.getElementById('audio-player');
+    player.src = '/phonemes/_tada.mp3'; player.play().catch(()=>{});
+    setTimeout(() => { minimalTestIdx++; showMinimalTest(); }, 1000);
+  } else {
+    el.style.color = '#f87171';
+    el.textContent = '❌ That was: ' + (minimalCurrentTarget === 1 ? a : b);
+    document.getElementById('minimal-hint').textContent = 'Tap ▶ to hear it again, then pick';
   }
 }
 
