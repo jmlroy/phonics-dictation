@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+<title>Phonics Dictation</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #1a1a2e; color: #e0e0e0; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .container { width: 100%; max-width: 480px; padding: 16px; }
+
+  /* Screens */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Header */
+  .header { text-align: center; padding: 20px 0 12px; }
+  .header h1 { font-size: 22px; color: #7c3aed; font-weight: 700; letter-spacing: -0.3px; }
+  .header p { font-size: 13px; color: #888; margin-top: 4px; }
+
+  /* Cards */
+  .card {
+    background: #16213e; border-radius: 14px; padding: 18px;
+    margin-bottom: 12px; border: 1px solid #1e2d4a;
+  }
+
+  /* Buttons */
+  .btn {
+    display: block; width: 100%; padding: 14px; border: none;
+    border-radius: 12px; font-size: 16px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .btn:active { transform: scale(0.97); opacity: 0.85; }
+  .btn-primary { background: #7c3aed; color: #fff; }
+  .btn-secondary { background: #1e2d4a; color: #b0b0b0; }
+  .btn-success { background: #059669; color: #fff; }
+  .btn-danger { background: #dc2626; color: #fff; }
+  .btn-warning { background: #d97706; color: #fff; }
+  .btn-ghost { background: transparent; color: #888; border: 1px solid #2a2a4a; }
+  .btn-small { padding: 10px 16px; font-size: 14px; width: auto; display: inline-block; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-row .btn { flex: 1; min-width: 80px; }
+
+  /* Level buttons */
+  .level-btn {
+    text-align: left; padding: 16px; margin-bottom: 8px;
+    background: #16213e; border: 2px solid #1e2d4a; border-radius: 12px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .level-btn:active { transform: scale(0.98); }
+  .level-btn.selected { border-color: #7c3aed; background: #1a1a3e; }
+  .level-btn .name { font-size: 17px; font-weight: 600; color: #e0e0e0; }
+  .level-btn .subtitle { font-size: 13px; color: #888; margin-top: 3px; }
+  .level-btn .count { font-size: 12px; color: #666; margin-top: 2px; }
+  .level-btn .emoji { font-size: 24px; margin-right: 10px; }
+
+  /* Speed buttons */
+  .speed-btn {
+    padding: 12px 14px; margin-bottom: 6px;
+    background: #16213e; border: 2px solid #1e2d4a; border-radius: 10px;
+    cursor: pointer; text-align: left; transition: all 0.15s;
+  }
+  .speed-btn.selected { border-color: #7c3aed; }
+  .speed-btn .label { font-size: 15px; font-weight: 600; }
+  .speed-btn .desc { font-size: 12px; color: #888; margin-top: 2px; }
+
+  /* Dictation area */
+  .dictation-top { text-align: center; padding: 8px 0; }
+  .progress { font-size: 13px; color: #888; }
+  .word-number { font-size: 12px; color: #666; margin-bottom: 8px; }
+
+  .play-area { text-align: center; padding: 20px 0; }
+  .play-btn {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: #7c3aed; border: none; color: #fff;
+    font-size: 36px; cursor: pointer; transition: all 0.15s;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
+  }
+  .play-btn:active { transform: scale(0.92); }
+
+  .speed-indicator {
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 600; margin-top: 8px;
+    background: #1e2d4a; color: #888;
+  }
+  .speed-indicator.active-normal { background: #7c3aed20; color: #7c3aed; border: 1px solid #7c3aed40; }
+  .speed-indicator.active-slow { background: #d9770620; color: #d97706; border: 1px solid #d9770640; }
+  .speed-indicator.active-phoneme { background: #05966920; color: #059669; border: 1px solid #05966940; }
+
+  /* Input */
+  .input-area { padding: 8px 0; }
+  .spelling-input {
+    width: 100%; padding: 14px 16px; font-size: 22px;
+    background: #0f3460; border: 2px solid #1e2d4a; border-radius: 12px;
+    color: #fff; text-align: center; letter-spacing: 4px;
+    outline: none; transition: border-color 0.15s;
+  }
+  .spelling-input:focus { border-color: #7c3aed; }
+
+  /* Result display */
+  .result-area { text-align: center; padding: 12px 0; min-height: 60px; }
+  .result-message { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .result-message.correct { color: #34d399; }
+  .result-message.incorrect { color: #f87171; }
+  .result-chars {
+    display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;
+    font-size: 28px; font-weight: 700; letter-spacing: 2px;
+    padding: 12px; background: #0f3460; border-radius: 10px;
+  }
+  .result-chars .correct { color: #34d399; }
+  .result-chars .wrong { color: #f87171; text-decoration: underline; }
+  .result-chars .missing { color: #fbbf24; opacity: 0.7; }
+  .result-chars .extra { color: #f87171; background: #dc262630; padding: 0 4px; border-radius: 4px; }
+
+  /* Summary */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .stat-box {
+    background: #0f3460; border-radius: 10px; padding: 12px; text-align: center;
+  }
+  .stat-box .num { font-size: 28px; font-weight: 700; }
+  .stat-box .label { font-size: 11px; color: #888; margin-top: 4px; }
+  .stat-box .num.green { color: #34d399; }
+  .stat-box .num.red { color: #f87171; }
+  .stat-box .num.yellow { color: #fbbf24; }
+  .stat-box .num.purple { color: #a78bfa; }
+  .detail-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
+
+  /* Action buttons area */
+  .action-area { padding: 8px 0; }
+
+  /* Phoneme display in hints */
+  .phoneme-row {
+    display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+    padding: 10px 0;
+  }
+  .phoneme-chip {
+    background: #1e2d4a; border-radius: 8px; padding: 8px 12px;
+    font-size: 15px; font-weight: 600; color: #a78bfa;
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  }
+  .phoneme-chip.repeat {
+    background: #d9770620; border: 1px solid #d9770640; color: #fbbf24;
+  }
+  .phoneme-chip:active { opacity: 0.7; }
+
+  /* Audio element hidden */
+  audio { display: none; }
+
+  .spacer { height: 20px; }
+  .hidden { display: none !important; }
+
+  .tag { font-size: 11px; color: #666; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+
+  @media (max-width: 400px) {
+    .container { padding: 12px; }
+    .result-chars { font-size: 24px; }
+    .spelling-input { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container" id="app">
+
+  <!-- Screen: Setup -->
+  <div class="screen active" id="screen-setup">
+    <div class="header">
+      <h1>🔤 Phonics Dictation</h1>
+      <p>Spelling practice for children</p>
+    </div>
+    <div class="card">
+      <div class="tag">Choose Level</div>
+      <div id="level-list"></div>
+    </div>
+    <div class="card">
+      <div class="tag">Speed Mode</div>
+      <div class="speed-btn" data-speed="normal" onclick="selectSpeed(this)">
+        <div class="label">🔊 Normal</div>
+        <div class="desc">Natural voice, regular speed</div>
+      </div>
+      <div class="speed-btn" data-speed="slow" onclick="selectSpeed(this)">
+        <div class="label">🐢 Slow</div>
+        <div class="desc">Slower, clearer enunciation</div>
+      </div>
+      <div class="speed-btn selected" data-speed="phoneme" onclick="selectSpeed(this)">
+        <div class="label">🔡 Phoneme by Phoneme</div>
+        <div class="desc">Word → sound each letter → word again</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="startSession()" id="start-btn">Start Dictation</button>
+    <div id="audio-status" style="text-align:center;margin-top:12px;font-size:13px;color:#666;"></div>
+  </div>
+
+  <!-- Screen: Dictation -->
+  <div class="screen" id="screen-dictation">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="backToSetup()" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Home</button>
+      <div class="header" style="padding-top:4px">
+        <h1>🔤 Dictation</h1>
+        <p id="dictation-level-name" style="font-size:13px;color:#888">Level 1 — Beginner</p>
+      </div>
+    </div>
+    <div class="play-area">
+      <div class="word-number" id="word-progress">Word 1 of 12</div>
+      <div class="progress" id="speed-label">🔡 Phoneme Mode</div>
+      <button class="play-btn" onclick="playWord()" id="play-btn">▶</button>
+      <div class="speed-indicator" id="speed-indicator">PHONEME</div>
+    </div>
+    <div class="card">
+      <div class="input-area">
+        <input type="text" class="spelling-input" id="spelling-input"
+               placeholder="Type the word..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+               onkeydown="if(event.key==='Enter')checkSpelling()">
+      </div>
+      <div class="result-area" id="result-area">
+        <div class="result-message" id="result-message"></div>
+        <div class="result-chars hidden" id="result-chars"></div>
+      </div>
+      <div class="phoneme-row" id="hint-phonemes"></div>
+    </div>
+    <div class="action-area" id="action-buttons">
+      <div class="btn-row" id="initial-actions">
+        <button class="btn btn-secondary" onclick="playWord()">🔊 Replay</button>
+        <button class="btn btn-success" onclick="checkSpelling()" id="check-btn">✓ Check</button>
+        <button class="btn btn-ghost btn-small" onclick="cycleSpeed()">⚡ Speed</button>
+        <button class="btn btn-ghost btn-small" onclick="showCustomTool()">📖 Type</button>
+      </div>
+      <div class="btn-row hidden" id="retry-actions">
+        <button class="btn btn-secondary" onclick="retryWord()">🔊 Listen Again</button>
+        <button class="btn btn-warning" onclick="getHint()">💡 Hint</button>
+        <button class="btn btn-danger" onclick="revealWord()">👁 Reveal</button>
+        <button class="btn btn-ghost" onclick="skipWord()">⏭ Skip</button>
+      </div>
+      <div class="btn-row hidden" id="next-actions">
+        <button class="btn btn-primary" onclick="nextWord()">➡ Next Word</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen: Custom Word Tool -->
+  <div class="screen" id="screen-custom">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="backToDictation()" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Back</button>
+      <div class="header" style="padding-top:4px">
+        <h1>📖 Custom Word</h1>
+        <p style="font-size:13px;color:#888">Type any word to hear it sounded out</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="tag">Enter a word</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <input type="text" id="custom-word-input" class="spelling-input"
+               placeholder="Type any word..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+               style="flex:1;text-align:left;letter-spacing:1px;font-size:18px"
+               onkeydown="if(event.key==='Enter')readCustomWord()">
+        <button class="btn btn-primary" style="flex:0 0 80px;padding:10px" onclick="readCustomWord()">🔊 Read</button>
+      </div>
+      <div id="custom-status" style="font-size:13px;color:#888;text-align:center;min-height:20px"></div>
+    </div>
+    <div class="card hidden" id="custom-result-card">
+      <div class="play-area" style="padding:8px 0">
+        <button class="play-btn" style="width:60px;height:60px;font-size:26px" onclick="playCustomWord()">▶</button>
+      </div>
+      <div style="text-align:center;font-size:20px;font-weight:600;color:#e0e0e0;margin-bottom:8px" id="custom-word-display"></div>
+      <div class="phoneme-row" id="custom-phonemes"></div>
+      <div style="margin-top:8px">
+        <div class="btn-row">
+          <button class="btn btn-secondary btn-small" onclick="playCustomWord()">🔊 Replay</button>
+          <button class="btn btn-small" style="background:#d97706;color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer" onclick="playCustomRepeat()">🔁 Repeat</button>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn btn-ghost" onclick="backToDictation()">← Back to Dictation</button>
+  </div>
+  <div class="screen" id="screen-summary">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="backToSetup()" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Home</button>
+      <div class="header" style="padding-top:4px">
+        <h1>📊 Round Summary</h1>
+      </div>
+    </div>
+    <div id="summary-content"></div>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" onclick="nextRound()">▶ Next Round</button>
+    <div class="spacer"></div>
+    <button class="btn btn-ghost" onclick="backToSetup()">← Back to Levels</button>
+  </div>
+
+</div>
+
+<audio id="audio-player" preload="auto"></audio>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────
+let sessionId = null;
+let currentWord = '';
+let currentSpeed = 'phoneme';  // default to phoneme mode
+let selectedLevel = '1';
+let currentTtsUrl = null;
+let currentTtsSlowUrl = null;
+let currentPhonemes = [];
+let currentPhonemeAudios = [];
+let phonemeQueue = [];
+let isPlaying = false;
+let wordsThisRound = 0;
+
+// ── Start up ──────────────────────────────────────────────────────────
+window.onload = async function() {
+  await loadLevels();
+  await testAudio();
+  // Default: phoneme mode selected
+  selectSpeed(document.querySelector('.speed-btn[data-speed="phoneme"]'));
+};
+
+async function loadLevels() {
+  try {
+    const resp = await fetch('/api/levels');
+    const data = await resp.json();
+    const list = document.getElementById('level-list');
+    list.innerHTML = '';
+    const emojis = {'1': '🟢', '2': '🟡', '3': '🔵'};
+    const colors = {'1': '#34d399', '2': '#fbbf24', '3': '#60a5fa'};
+    for (const [k, v] of Object.entries(data)) {
+      const div = document.createElement('div');
+      div.className = 'level-btn' + (k === selectedLevel ? ' selected' : '');
+      div.dataset.level = k;
+      div.innerHTML = `
+        <div style="display:flex;align-items:center;">
+          <span class="emoji">${emojis[k] || '📘'}</span>
+          <div>
+            <div class="name" style="color:${colors[k]}">${v.name}</div>
+            <div class="subtitle">${v.subtitle}</div>
+            <div class="count">${v.count} words</div>
+          </div>
+        </div>
+      `;
+      div.onclick = function() {
+        document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+        div.classList.add('selected');
+        selectedLevel = k;
+      };
+      list.appendChild(div);
+    }
+  } catch(e) {
+    document.getElementById('level-list').innerHTML = '<div style="color:#f87171;text-align:center">Failed to load levels</div>';
+  }
+}
+
+async function testAudio() {
+  const status = document.getElementById('audio-status');
+  try {
+    const resp = await fetch('/api/audio_test');
+    const data = await resp.json();
+    if (data.tts_ok) {
+      status.innerHTML = '✅ Audio ready (' + data.phoneme_count + ' phonemes, espeak: ' + (data.espeak_ok ? 'yes' : 'no') + ')';
+      status.style.color = '#34d399';
+    } else {
+      status.innerHTML = '⚠️ Audio test failed — check Volcengine API key';
+      status.style.color = '#f87171';
+    }
+  } catch(e) {
+    status.innerHTML = '⚠️ Could not test audio';
+  }
+}
+
+function selectSpeed(el) {
+  document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  currentSpeed = el.dataset.speed;
+}
+
+// ── Start Session ────────────────────────────────────────────────────
+async function startSession() {
+  document.getElementById('start-btn').textContent = 'Starting...';
+  document.getElementById('start-btn').disabled = true;
+  try {
+    const resp = await fetch('/api/start', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({level: selectedLevel, speed: currentSpeed})
+    });
+    const data = await resp.json();
+    if (data.error) { alert(data.error); return; }
+    sessionId = data.session_id;
+    wordsThisRound = data.words_this_round;
+    document.getElementById('speed-label').textContent = speedLabel(currentSpeed);
+    document.getElementById('speed-indicator').className = 'speed-indicator active-' + currentSpeed;
+    document.getElementById('speed-indicator').textContent = currentSpeed.toUpperCase();
+    showScreen('screen-dictation');
+    await loadWord();
+    document.getElementById('spelling-input').focus();
+  } catch(e) {
+    alert('Failed to start session: ' + e.message);
+  }
+  document.getElementById('start-btn').textContent = 'Start Dictation';
+  document.getElementById('start-btn').disabled = false;
+}
+
+function speedLabel(s) {
+  return {normal: '🔊 Normal', slow: '🐢 Slow', phoneme: '🔡 Phoneme Mode'}[s] || s;
+}
+
+// ── Word Loading & Playback ───────────────────────────────────────────
+async function loadWord() {
+  try {
+    const resp = await fetch('/api/word', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({session_id: sessionId})
+    });
+    const data = await resp.json();
+    if (data.error) { alert(data.error); return; }
+    setWordData(data);
+    resetResult();
+    document.getElementById('initial-actions').classList.remove('hidden');
+    document.getElementById('retry-actions').classList.add('hidden');
+    document.getElementById('next-actions').classList.add('hidden');
+    document.getElementById('spelling-input').value = '';
+    document.getElementById('spelling-input').focus();
+
+    // Auto-play based on speed mode
+    setTimeout(() => playWord(), 300);
+  } catch(e) {
+    alert('Failed to load word');
+  }
+}
+
+function setWordData(data) {
+  currentWord = data.word;
+  currentTtsUrl = data.tts_url;
+  currentTtsSlowUrl = data.tts_slow_url;
+  currentPhonemes = data.phoneme_names || [];
+  currentPhonemeAudios = data.phoneme_audios || [];
+  document.getElementById('word-progress').textContent = `Word ${data.word_index} of ${data.words_this_round}`;
+}
+
+// ── Audio Playback ────────────────────────────────────────────────────
+async function playWord() {
+  if (isPlaying) return;
+  isPlaying = true;
+  document.getElementById('play-btn').textContent = '⏳';
+
+  const player = document.getElementById('audio-player');
+
+  if (currentSpeed === 'phoneme') {
+    // Step 1: Say the whole word first
+    if (currentTtsUrl) {
+      await playAudioUrl(player, currentTtsUrl);
+      await sleep(400);
+    }
+    // Step 2: Phonemes one by one
+    for (let i = 0; i < currentPhonemeAudios.length; i++) {
+      const url = currentPhonemeAudios[i];
+      if (url) {
+        await playAudioUrl(player, url);
+        await sleep(150);
+      }
+    }
+    // Step 3: Say the whole word again
+    if (currentTtsUrl) {
+      await sleep(300);
+      await playAudioUrl(player, currentTtsUrl);
+    }
+  } else if (currentSpeed === 'slow') {
+    if (currentTtsSlowUrl) {
+      await playAudioUrl(player, currentTtsSlowUrl);
+    } else if (currentTtsUrl) {
+      await playAudioUrl(player, currentTtsUrl);
+    }
+  } else {
+    if (currentTtsUrl) {
+      await playAudioUrl(player, currentTtsUrl);
+    }
+  }
+
+  document.getElementById('play-btn').textContent = '▶';
+  isPlaying = false;
+}
+
+async function playAudioUrl(player, url) {
+  return new Promise((resolve, reject) => {
+    player.src = url;
+    player.onended = resolve;
+    player.onerror = resolve;  // don't block on errors
+    player.play().catch(() => resolve());
+    // Safety timeout
+    setTimeout(resolve, 5000);
+  });
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── Spelling Check ────────────────────────────────────────────────────
+async function checkSpelling() {
+  const input = document.getElementById('spelling-input');
+  const attempt = input.value.trim();
+  if (!attempt) return;
+
+  try {
+    const resp = await fetch('/api/check', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({session_id: sessionId, attempt: attempt})
+    });
+    const data = await resp.json();
+    if (data.error) { alert(data.error); return; }
+    showResult(data);
+  } catch(e) {
+    alert('Check failed');
+  }
+}
+
+function showResult(data) {
+  const msgEl = document.getElementById('result-message');
+  const charsEl = document.getElementById('result-chars');
+
+  if (data.correct) {
+    msgEl.className = 'result-message correct';
+    msgEl.textContent = data.message;
+    charsEl.classList.add('hidden');
+    document.getElementById('initial-actions').classList.add('hidden');
+    document.getElementById('retry-actions').classList.add('hidden');
+    document.getElementById('next-actions').classList.remove('hidden');
+    document.getElementById('spelling-input').value = '';
+  } else {
+    msgEl.className = 'result-message incorrect';
+    msgEl.textContent = data.message;
+    // Build character display
+    charsEl.classList.remove('hidden');
+    charsEl.innerHTML = data.chars.map(c => {
+      let cls = 'correct';
+      if (!c.correct) cls = 'wrong';
+      if (c.missing) cls = 'missing';
+      if (c.extra) cls = 'extra';
+      return `<span class="${cls}">${c.char || '?'}</span>`;
+    }).join('');
+
+    document.getElementById('initial-actions').classList.add('hidden');
+    document.getElementById('retry-actions').classList.remove('hidden');
+    document.getElementById('next-actions').classList.add('hidden');
+
+    // Show hint phonemes
+    const hintEl = document.getElementById('hint-phonemes');
+    hintEl.innerHTML = '';
+    if (data.hint_phonemes && data.hint_phonemes.length) {
+      data.hint_phonemes.forEach(p => {
+        const chip = document.createElement('span');
+        chip.className = 'phoneme-chip';
+        chip.textContent = (p.repeat ? '🔁 ' : '') + '/' + p.name + '/';
+        if (p.audio_url) {
+          chip.onclick = () => {
+            const player = document.getElementById('audio-player');
+            playAudioUrl(player, p.audio_url);
+          };
+        }
+        hintEl.appendChild(chip);
+      });
+      // Auto-play the repeat version after a short delay
+      setTimeout(() => {
+        if (data.hint_phonemes.length > 0) {
+          const first = data.hint_phonemes[0];
+          if (first.audio_url) {
+            const player = document.getElementById('audio-player');
+            playAudioUrl(player, first.audio_url);
+          }
+        }
+      }, 200);
+    }
+  }
+}
+
+function resetResult() {
+  document.getElementById('result-message').className = 'result-message';
+  document.getElementById('result-message').textContent = '';
+  document.getElementById('result-chars').classList.add('hidden');
+  document.getElementById('result-chars').innerHTML = '';
+  document.getElementById('hint-phonemes').innerHTML = '';
+}
+
+// ── Retry / Hint / Reveal / Skip ──────────────────────────────────────
+async function retryWord() {
+  try {
+    const resp = await fetch('/api/retry_word', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({session_id: sessionId})
+    });
+    const data = await resp.json();
+    if (data.error) return;
+    setWordData(data);
+    resetResult();
+    setTimeout(() => playWord(), 100);
+  } catch(e) {}
+}
+
+async function getHint() {
+  try {
+    const resp = await fetch('/api/hint', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({session_id: sessionId})
+    });
+    const data = await resp.json();
+    const hintEl = document.getElementById('hint-phonemes');
+    hintEl.innerHTML = '';
+    if (data.phonemes) {
+      data.phonemes.forEach(p => {
+        const chip = document.createElement('span');
+        chip.className = 'phoneme-chip';
+        chip.textContent = '/' + p.name + '/';
+        chip.onclick = () => {
+          const player = document.getElementById('audio-player');
+          playAudioUrl(player, p.audio_url);
+        };
+        hintEl.appendChild(chip);
+      });
+    }
+    // Play slow TTS
+    if (data.tts_slow_url) {
+      const player = document.getElementById('audio-player');
+      await playAudioUrl(player, data.tts_slow_url);
+    }
+  } catch(e) {}
+}
+
+async function revealWord() {
+  try {
+    const resp = await fetch('/api/reveal', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({session_id: sessionId})
+    });
+    const data = await resp.json();
+    if (data.error) return;
+    const msgEl = document.getElementById('result-message');
+    msgEl.className = 'result-message incorrect';
+    msgEl.textContent = 'The word was: ' + data.word;
+    const charsEl = document.getElementById('result-chars');
+    charsEl.classList.remove('hidden');
+    charsEl.innerHTML = '<span style="color:#34d399;font-size:28px">' + data.word.split('').map(c => `<span class="correct">${c}</span>`).join('') + '</span>';
+
+    document.getElementById('retry-actions').classList.add('hidden');
+    document.getElementById('next-actions').classList.remove('hidden');
+  } catch(e) {}
+}
+
+async function skipWord() {
+  try {
+    const resp = await fetch('/api/skip', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({session_id: sessionId})
+    });
+    const data = await resp.json();
+    if (data.error) return;
+    document.getElementById('retry-actions').classList.add('hidden');
+    await nextWord();
+  } catch(e) {}
+}
+
+// ── Next Word / Round Flow ────────────────────────────────────────────
+async function nextWord() {
+  document.getElementById('play-btn').textContent = '⏳';
+  try {
+    const resp = await fetch('/api/next_word', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({session_id: sessionId})
+    });
+    const data = await resp.json();
+    if (data.error) { alert(data.error); return; }
+    if (data.round_complete) {
+      await showSummary();
+      return;
+    }
+    setWordData(data);
+    resetResult();
+    document.getElementById('initial-actions').classList.remove('hidden');
+    document.getElementById('retry-actions').classList.add('hidden');
+    document.getElementById('next-actions').classList.add('hidden');
+    document.getElementById('spelling-input').value = '';
+    document.getElementById('spelling-input').focus();
+    document.getElementById('play-btn').textContent = '▶';
+    setTimeout(() => playWord(), 300);
+  } catch(e) {
+    document.getElementById('play-btn').textContent = '▶';
+  }
+}
+
+async function cycleSpeed() {
+  const speeds = ['normal', 'slow', 'phoneme'];
+  const idx = speeds.indexOf(currentSpeed);
+  currentSpeed = speeds[(idx + 1) % 3];
+  document.getElementById('speed-label').textContent = speedLabel(currentSpeed);
+  document.getElementById('speed-indicator').className = 'speed-indicator active-' + currentSpeed;
+  document.getElementById('speed-indicator').textContent = currentSpeed.toUpperCase();
+  // Update server
+  try {
+    await fetch('/api/set_speed', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({session_id: sessionId, speed: currentSpeed})
+    });
+  } catch(e) {}
+  // Play with new speed
+  playWord();
+}
+
+// ── Summary ───────────────────────────────────────────────────────────
+async function showSummary() {
+  try {
+    const resp = await fetch('/api/summary', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({session_id: sessionId})
+    });
+    const data = await resp.json();
+    if (data.error) { alert(data.error); return; }
+
+    const el = document.getElementById('summary-content');
+    const accColor = data.accuracy >= 80 ? 'green' : (data.accuracy >= 50 ? 'yellow' : 'red');
+    const allColor = data.all_time_accuracy >= 80 ? 'green' : (data.all_time_accuracy >= 50 ? 'yellow' : 'red');
+
+    el.innerHTML = `
+      <div class="card">
+        <div class="summary-grid">
+          <div class="stat-box">
+            <div class="num green">${data.correct}</div>
+            <div class="label">Correct</div>
+          </div>
+          <div class="stat-box">
+            <div class="num red">${data.incorrect}</div>
+            <div class="label">Incorrect</div>
+          </div>
+          <div class="stat-box">
+            <div class="num ${accColor}">${data.accuracy}%</div>
+            <div class="label">Accuracy</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <span>Total words</span>
+          <span><strong>${data.total}</strong></span>
+        </div>
+        <div class="detail-row">
+          <span>All-time accuracy</span>
+          <span class="${allColor}" style="font-weight:700">${data.all_time_accuracy}%</span>
+        </div>
+        <div class="detail-row">
+          <span>All-time correct/errors</span>
+          <span><span class="green">${data.all_time_correct}</span> / <span class="red">${data.all_time_errors}</span></span>
+        </div>
+        ${data.error_bank_total > 0 ? `
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid #1e2d4a">
+          <div style="font-size:13px;color:#fbbf24;margin-bottom:4px">📝 Review these words:</div>
+          <div style="font-size:14px">${data.error_bank.join(' · ') || '(none shown)'}</div>
+          ${data.error_bank_total > 10 ? `<div style="font-size:12px;color:#888">...and ${data.error_bank_total - 10} more</div>` : ''}
+        </div>` : ''}
+        ${data.weak_letters.length > 0 ? `
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid #1e2d4a">
+          <div style="font-size:13px;color:#f87171;margin-bottom:4px">🎯 Focus on these letters:</div>
+          <div style="font-size:18px;font-weight:700;color:#f87171">${data.weak_letters.join(' · ')}</div>
+        </div>` : ''}
+      </div>
+    `;
+    showScreen('screen-summary');
+  } catch(e) {
+    alert('Failed to load summary');
+  }
+}
+
+async function nextRound() {
+  try {
+    const resp = await fetch('/api/next_round', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({session_id: sessionId})
+    });
+    const data = await resp.json();
+    if (data.error) { alert(data.error); return; }
+    setWordData(data);
+    wordsThisRound = data.words_this_round;
+    document.getElementById('speed-label').textContent = speedLabel(currentSpeed);
+    document.getElementById('speed-indicator').className = 'speed-indicator active-' + currentSpeed;
+    document.getElementById('speed-indicator').textContent = currentSpeed.toUpperCase();
+    resetResult();
+    document.getElementById('initial-actions').classList.remove('hidden');
+    document.getElementById('retry-actions').classList.add('hidden');
+    document.getElementById('next-actions').classList.add('hidden');
+    document.getElementById('spelling-input').value = '';
+    showScreen('screen-dictation');
+    document.getElementById('spelling-input').focus();
+    setTimeout(() => playWord(), 300);
+  } catch(e) {
+    alert('Failed to start next round');
+  }
+}
+
+// ── Custom Word Tool ────────────────────────────────────────────────────
+let customWordData = null;
+
+function showCustomTool() {
+  document.getElementById('custom-word-input').value = '';
+  document.getElementById('custom-status').textContent = '';
+  document.getElementById('custom-result-card').classList.add('hidden');
+  customWordData = null;
+  showScreen('screen-custom');
+  setTimeout(() => document.getElementById('custom-word-input').focus(), 200);
+}
+
+function backToDictation() {
+  showScreen('screen-dictation');
+}
+
+async function readCustomWord() {
+  const input = document.getElementById('custom-word-input');
+  const word = input.value.trim().toLowerCase();
+  if (!word) return;
+
+  document.getElementById('custom-status').textContent = 'Loading...';
+  document.getElementById('custom-result-card').classList.add('hidden');
+
+  try {
+    const resp = await fetch('/api/speak_custom', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({word: word})
+    });
+    const data = await resp.json();
+    if (data.error) {
+      document.getElementById('custom-status').textContent = 'Error: ' + data.error;
+      return;
+    }
+
+    customWordData = data;
+    document.getElementById('custom-word-display').textContent = word;
+    document.getElementById('custom-status').textContent = data.found ? '✅ Word found in dictionary' : '⚠️ Word not in dictionary (using voice only)';
+
+    // Show phonemes
+    const phEl = document.getElementById('custom-phonemes');
+    phEl.innerHTML = '';
+    if (data.phoneme_names && data.phoneme_names.length) {
+      data.phoneme_names.forEach((name, i) => {
+        const chip = document.createElement('span');
+        chip.className = 'phoneme-chip';
+        chip.textContent = '/' + name + '/';
+        if (data.phoneme_audios[i]) {
+          chip.onclick = () => {
+            const player = document.getElementById('audio-player');
+            playAudioUrl(player, data.phoneme_audios[i]);
+          };
+        }
+        phEl.appendChild(chip);
+      });
+    }
+
+    document.getElementById('custom-result-card').classList.remove('hidden');
+    // Auto-play
+    setTimeout(() => playCustomWord(), 300);
+  } catch(e) {
+    document.getElementById('custom-status').textContent = 'Failed to load word';
+  }
+}
+
+async function playCustomWord() {
+  if (!customWordData) return;
+  const player = document.getElementById('audio-player');
+
+  // Step 1: Full word
+  if (customWordData.tts_url) {
+    await playAudioUrl(player, customWordData.tts_url);
+    await sleep(400);
+  }
+  // Step 2: Phonemes one by one
+  if (customWordData.phoneme_audios) {
+    for (const url of customWordData.phoneme_audios) {
+      if (url) {
+        await playAudioUrl(player, url);
+        await sleep(150);
+      }
+    }
+  }
+  // Step 3: Full word again
+  if (customWordData.tts_url) {
+    await sleep(300);
+    await playAudioUrl(player, customWordData.tts_url);
+  }
+}
+
+async function playCustomRepeat() {
+  if (!customWordData) return;
+  const player = document.getElementById('audio-player');
+
+  // Play repeat versions (for error/hint practice)
+  if (customWordData.phoneme_repeat_audios) {
+    for (const url of customWordData.phoneme_repeat_audios) {
+      if (url) {
+        await playAudioUrl(player, url);
+        await sleep(150);
+      }
+    }
+  }
+  if (customWordData.tts_slow_url) {
+    await sleep(200);
+    await playAudioUrl(player, customWordData.tts_slow_url);
+  }
+}
+
+function backToSetup() {
+  sessionId = null;
+  showScreen('screen-setup');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── Keyboard helper ───────────────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    const input = document.getElementById('spelling-input');
+    if (document.activeElement === input) {
+      checkSpelling();
+    }
+  }
+});
+</script>
+</body>
+</html>
