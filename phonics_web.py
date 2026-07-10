@@ -1008,6 +1008,7 @@ def api_speak_custom():
         "word": word,
         "found": phonemes is not None,
         "phoneme_names": phoneme_names,
+        "phoneme_graphemes": phoneme_names,
         "phoneme_audios": phoneme_audios,
         "phoneme_repeat_audios": phoneme_repeat_audios,
         "tts_url": tts_url,

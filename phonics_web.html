@@ -175,6 +175,12 @@
     <div class="card">
       <div class="tag">Choose Level</div>
       <div id="level-list"></div>
+      <div id="sub-level-card" class="hidden" style="margin-top:8px;padding-top:8px;border-top:1px solid #1e2d4a">
+        <div class="tag" style="margin-bottom:4px">Focus Area</div>
+        <select id="sub-level-select" style="width:100%;padding:10px;background:#0f3460;color:#e0e0e0;border:2px solid #1e2d4a;border-radius:8px;font-size:14px;outline:none">
+          <option value="">All words in this level</option>
+        </select>
+      </div>
     </div>
     <div class="card">
       <div class="tag">Speed Mode</div>
@@ -192,6 +198,8 @@
       </div>
     </div>
     <button class="btn btn-primary" onclick="startSession()" id="start-btn">Start Dictation</button>
+    <button class="btn btn-ghost" onclick="showCustomTool()" style="margin-top:8px">📖 Word Reader</button>
+    <button class="btn btn-ghost" onclick="showErrorReview()" id="error-review-btn" style="margin-top:4px">📊 Error Review</button>
     <div id="audio-status" style="text-align:center;margin-top:12px;font-size:13px;color:#666;"></div>
   </div>
 
@@ -291,6 +299,22 @@
     <button class="btn btn-ghost" onclick="backToSetup()">← Back to Levels</button>
   </div>
 
+  <!-- Screen: Error Review -->
+  <div class="screen" id="screen-errors">
+    <div class="top-bar" style="position:relative;min-height:44px">
+      <button class="btn btn-ghost btn-small" onclick="backToSetup()" style="position:absolute;left:0;top:8px;width:auto;padding:8px 12px;z-index:2">← Home</button>
+      <div class="header" style="padding-top:4px">
+        <h1>📊 Error Review</h1>
+        <p style="font-size:13px;color:#888">Past mistakes and weak letters</p>
+      </div>
+    </div>
+    <div id="error-review-content">
+      <div class="card" style="text-align:center;color:#888">Loading...</div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn btn-ghost" onclick="backToSetup()">← Back</button>
+  </div>
+
 </div>
 
 <audio id="audio-player" preload="auto"></audio>
@@ -323,8 +347,8 @@ async function loadLevels() {
     const data = await resp.json();
     const list = document.getElementById('level-list');
     list.innerHTML = '';
-    const emojis = {'1': '🟢', '2': '🟡', '3': '🔵'};
-    const colors = {'1': '#34d399', '2': '#fbbf24', '3': '#60a5fa'};
+    const emojis = {'1': '🟢', '2': '🟡', '3': '🔵', 'heart': '❤️'};
+    const colors = {'1': '#34d399', '2': '#fbbf24', '3': '#60a5fa', 'heart': '#f87171'};
     for (const [k, v] of Object.entries(data)) {
       const div = document.createElement('div');
       div.className = 'level-btn' + (k === selectedLevel ? ' selected' : '');
@@ -333,9 +357,9 @@ async function loadLevels() {
         <div style="display:flex;align-items:center;">
           <span class="emoji">${emojis[k] || '📘'}</span>
           <div>
-            <div class="name" style="color:${colors[k]}">${v.name}</div>
+            <div class="name" style="color:${colors[k] || '#888'}">${v.name}</div>
             <div class="subtitle">${v.subtitle}</div>
-            <div class="count">${v.count} words</div>
+            <div class="count">${v.count} words${v.subs && v.subs.length ? ' · ' + v.subs.length + ' areas' : ''}</div>
           </div>
         </div>
       `;
@@ -343,6 +367,21 @@ async function loadLevels() {
         document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
         div.classList.add('selected');
         selectedLevel = k;
+        // Show sub-level dropdown if available
+        const subCard = document.getElementById('sub-level-card');
+        const subSelect = document.getElementById('sub-level-select');
+        subSelect.innerHTML = '<option value="">All words in this level</option>';
+        if (v.subs && v.subs.length) {
+          v.subs.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.name;
+            subSelect.appendChild(opt);
+          });
+          subCard.classList.remove('hidden');
+        } else {
+          subCard.classList.add('hidden');
+        }
       };
       list.appendChild(div);
     }
@@ -378,11 +417,12 @@ function selectSpeed(el) {
 async function startSession() {
   document.getElementById('start-btn').textContent = 'Starting...';
   document.getElementById('start-btn').disabled = true;
+  const subVal = document.getElementById('sub-level-select')?.value || '';
   try {
     const resp = await fetch('/api/start', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({level: selectedLevel, speed: currentSpeed})
+      body: JSON.stringify({level: selectedLevel, speed: currentSpeed, sub: subVal || undefined})
     });
     const data = await resp.json();
     if (data.error) { alert(data.error); return; }
@@ -840,21 +880,31 @@ async function readCustomWord() {
     document.getElementById('custom-word-display').textContent = word;
     document.getElementById('custom-status').textContent = data.found ? '✅ Word found in dictionary' : '⚠️ Word not in dictionary (using voice only)';
 
-    // Show phonemes
+    // Show phonemes as visual boxes
     const phEl = document.getElementById('custom-phonemes');
     phEl.innerHTML = '';
     if (data.phoneme_names && data.phoneme_names.length) {
       data.phoneme_names.forEach((name, i) => {
-        const chip = document.createElement('span');
-        chip.className = 'phoneme-chip';
-        chip.textContent = '/' + name + '/';
+        const box = document.createElement('div');
+        box.className = 'phoneme-box';
+        box.style.cssText = 'display:inline-flex;flex-direction:column;align-items:center;background:#1e2d4a;border-radius:10px;padding:8px 14px;margin:4px;cursor:pointer;transition:all 0.15s;border:2px solid #2a2a4a';
+        const label = document.createElement('div');
+        label.style.cssText = 'font-size:11px;color:#888;margin-bottom:4px;text-transform:uppercase';
+        label.textContent = '/' + name + '/';
+        const sound = document.createElement('div');
+        sound.style.cssText = 'font-size:22px;font-weight:700;color:#a78bfa';
+        sound.textContent = data.phoneme_graphemes && data.phoneme_graphemes[i] ? data.phoneme_graphemes[i] : '?';
+        box.appendChild(label);
+        box.appendChild(sound);
         if (data.phoneme_audios[i]) {
-          chip.onclick = () => {
+          box.onclick = () => {
             const player = document.getElementById('audio-player');
             playAudioUrl(player, data.phoneme_audios[i]);
+            box.style.borderColor = '#7c3aed';
+            setTimeout(() => { box.style.borderColor = '#2a2a4a'; }, 300);
           };
         }
-        phEl.appendChild(chip);
+        phEl.appendChild(box);
       });
     }
 
@@ -913,6 +963,40 @@ async function playCustomRepeat() {
 function backToSetup() {
   sessionId = null;
   showScreen('screen-setup');
+}
+
+function onSubLevelChange() {
+  // Sub-level selection changed - no action needed until start
+}
+
+async function showErrorReview() {
+  showScreen('screen-errors');
+  document.getElementById('error-review-content').innerHTML = '<div class="card" style="text-align:center;color:#888">Loading...</div>';
+  try {
+    const resp = await fetch('/api/errors');
+    const logs = await resp.json();
+    const el = document.getElementById('error-review-content');
+    if (!logs.length) {
+      el.innerHTML = '<div class="card" style="text-align:center;color:#888">No errors logged yet. Complete a dictation session first!</div>';
+      return;
+    }
+    let html = '';
+    logs.slice().reverse().slice(0, 10).forEach(log => {
+      html += '<div class="card" style="margin-bottom:8px">';
+      html += '<div style="font-size:12px;color:#666">' + log.timestamp + ' · ' + (log.level == 'heart' ? '❤️ Heart Words' : 'Level ' + log.level) + '</div>';
+      html += '<div style="margin-top:6px"><span class="green">' + log.total_correct + ' correct</span> · <span class="red">' + log.total_errors + ' errors</span> · ' + Math.round(log.total_correct / Math.max(log.total_attempts, 1) * 100) + '%</div>';
+      if (log.error_bank && log.error_bank.length) {
+        html += '<div style="font-size:13px;color:#fbbf24;margin-top:4px">✗ ' + log.error_bank.join(', ') + '</div>';
+      }
+      if (log.weak_letters && Object.keys(log.weak_letters).length) {
+        html += '<div style="font-size:13px;color:#f87171;margin-top:2px">🎯 Focus: ' + Object.keys(log.weak_letters).join(', ') + '</div>';
+      }
+      html += '</div>';
+    });
+    el.innerHTML = html || '<div class="card" style="text-align:center;color:#888">No detailed logs</div>';
+  } catch(e) {
+    document.getElementById('error-review-content').innerHTML = '<div class="card" style="text-align:center;color:#f87171">Failed to load errors</div>';
+  }
 }
 
 function showScreen(id) {
