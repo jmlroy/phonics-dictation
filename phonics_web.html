@@ -364,15 +364,18 @@
     </div>
     <div id="reading-content" class="hidden">
       <div style="text-align:center;padding:20px 0">
-        <div style="font-size:48px;margin-bottom:12px" id="reading-word-display">🔊</div>
-        <button class="play-btn" onclick="playReadingWord()" style="width:70px;height:70px;font-size:30px">▶</button>
+        <div id="reading-word-display" style="font-size:42px;font-weight:700;color:#e0e0e0;min-height:50px;letter-spacing:4px">—</div>
+        <div style="font-size:13px;color:#888;margin-top:6px">Read this word aloud</div>
       </div>
       <div class="card" style="text-align:center">
         <button class="btn btn-primary" onclick="startReadingRecognition()" id="reading-start-btn">🎤 Start Speaking</button>
         <div id="reading-status" style="font-size:14px;color:#888;margin-top:8px;min-height:24px"></div>
         <div id="reading-result" style="font-size:18px;font-weight:600;margin-top:8px;min-height:30px"></div>
       </div>
-      <div style="text-align:center;font-size:11px;color:#555;margin-top:8px">Works best in Chrome/Edge on mobile</div>
+      <div class="card hidden" id="reading-reveal" style="margin-top:8px">
+        <div style="font-size:13px;color:#a78bfa">Phonemes:</div>
+        <div id="reading-phonemes" style="font-size:16px;color:#a78bfa"></div>
+      </div>
     </div>
     <button class="btn btn-ghost" onclick="backToTestHub()">← Back</button>
   </div>
@@ -1252,6 +1255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function startReadingTest() {
   document.getElementById('reading-setup').classList.add('hidden');
   document.getElementById('reading-content').classList.remove('hidden');
+  document.getElementById('reading-reveal').classList.add('hidden');
   readingIdx = 0; readingCorrect = 0; readingTotal = 0;
   fetchReadingWords();
 }
@@ -1259,23 +1263,23 @@ async function fetchReadingWords() {
   try {
     const resp = await fetch('/api/start', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({level:readingLevel,speed:'normal'})});
     const data = await resp.json();
-    if (data.session_id) { readingWords.push(data.session_id); }
-    // Fetch first word
-    playReadingWord();
+    if (data.session_id) { readingSid = data.session_id; }
+    showReadingWord();
   } catch(e) { document.getElementById('reading-status').textContent = 'Error loading words'; }
 }
-function playReadingWord() {
-  if (readingWords.length === 0) { return; }
-  fetch('/api/word', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id: readingWords[0]})})
+let readingSid = '';
+function showReadingWord() {
+  if (!readingSid) { document.getElementById('reading-word-display').textContent = '✅ All done!'; return; }
+  fetch('/api/word', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id: readingSid})})
     .then(r => r.json()).then(d => {
       readingCurrentWord = d.word;
       readingTotalPhonemes = d.phoneme_names || [];
-      const player = document.getElementById('audio-player');
-      if (d.tts_url) { player.src = d.tts_url; player.play().catch(()=>{}); }
+      document.getElementById('reading-word-display').textContent = d.word;
+      document.getElementById('reading-reveal').classList.add('hidden');
     }).catch(()=>{});
-  document.getElementById('reading-status').textContent = '🎤 Tap "Start Speaking" and say the word';
+  document.getElementById('reading-status').textContent = '🎤 Read the word aloud, then tap "Start Speaking"';
   document.getElementById('reading-result').textContent = '';
-  document.getElementById('reading-word-display').textContent = '🔊';
+  document.getElementById('reading-start-btn').textContent = '🎤 Start Speaking';
 }
 let readingCurrentWord = '';
 let readingTotalPhonemes = [];
@@ -1302,12 +1306,13 @@ function startReadingRecognition() {
     const el = document.getElementById('reading-result');
     if (correct) {
       el.style.color = '#34d399';
-      el.textContent = '✅ Correct! ' + readingCurrentWord;
+      el.textContent = '✅ Correct! Reading: "' + readingCurrentWord + '"';
       // Show phoneme reveal
+      document.getElementById('reading-reveal').classList.remove('hidden');
       if (readingTotalPhonemes.length) {
-        document.getElementById('reading-word-display').textContent = readingTotalPhonemes.join(' · ');
+        document.getElementById('reading-phonemes').textContent = readingTotalPhonemes.join(' · ');
       }
-      setTimeout(() => { playReadingWord(); }, 1500);
+      setTimeout(() => { showReadingWord(); }, 1500);
     } else {
       el.style.color = '#f87171';
       el.textContent = '❌ Heard: "' + attempts[0] + '" — try again';
