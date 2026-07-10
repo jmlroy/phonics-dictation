@@ -567,6 +567,13 @@ function showResult(data) {
     document.getElementById('retry-actions').classList.add('hidden');
     document.getElementById('next-actions').classList.remove('hidden');
     document.getElementById('spelling-input').value = '';
+    // Play celebration sound
+    const player = document.getElementById('audio-player');
+    player.src = '/phonemes/_tada.mp3';
+    player.play().catch(() => {});
+    // Auto-advance after 1.2s
+    if (window.autoAdvanceTimer) clearTimeout(window.autoAdvanceTimer);
+    window.autoAdvanceTimer = setTimeout(() => nextWord(), 1200);
   } else {
     msgEl.className = 'result-message incorrect';
     msgEl.textContent = data.message;
