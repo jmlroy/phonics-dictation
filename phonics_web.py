@@ -139,6 +139,54 @@ def get_phoneme_list(word):
     return result
 
 
+# ARPAbet to IPA mapping for display
+ARPABET_TO_IPA = {
+    "AA": "ɑ", "AE": "æ", "AH": "ʌ", "AO": "ɔ", "AW": "aʊ",
+    "AY": "aɪ", "EH": "ɛ", "ER": "ɝ", "EY": "eɪ", "IH": "ɪ",
+    "IY": "i", "OW": "oʊ", "OY": "ɔɪ", "UH": "ʊ", "UW": "u",
+    "B": "b", "CH": "tʃ", "D": "d", "DH": "ð", "F": "f",
+    "G": "g", "HH": "h", "JH": "dʒ", "K": "k", "L": "l",
+    "M": "m", "N": "n", "NG": "ŋ", "P": "p", "R": "r",
+    "S": "s", "SH": "ʃ", "T": "t", "TH": "θ", "V": "v",
+    "W": "w", "Y": "j", "Z": "z", "ZH": "ʒ",
+}
+
+# Grapheme pattens for letter-group splitting
+GRAPHEME_PATTERNS = sorted([
+    "tch","dge","eigh","augh","ough","igh","qu",
+    "th","sh","ch","wh","ph","ck","ng","nk","kn","wr","gn","mb",
+    "ee","ea","ai","ay","oa","ow","oe","ie","ei","ey","oi","oy",
+    "oo","ew","ui","ue","ou","au","aw",
+    "ar","or","er","ir","ur","ear",
+    "bb","dd","ff","gg","ll","mm","nn","pp","rr","ss","tt","zz",
+    "ci","ti","si","di","tu","ture","sure",
+], key=len, reverse=True)
+
+
+def split_graphemes(word):
+    """Split word into grapheme groups matching phoneme boundaries."""
+    w = word.lower()
+    parts = []
+    i = 0
+    while i < len(w):
+        matched = False
+        for p in GRAPHEME_PATTERNS:
+            if w[i:i+len(p)] == p:
+                parts.append(p)
+                i += len(p)
+                matched = True
+                break
+        if not matched:
+            # Check for silent e at end
+            if w[i] == 'e' and i == len(w) - 1 and len(parts) > 0:
+                parts[-1] += 'e'
+                i += 1
+            else:
+                parts.append(w[i])
+                i += 1
+    return parts
+
+
 # ── Volcengine TTS (cached) ────────────────────────────────────────────────
 
 def _call_volc_tts(word, speech_rate=0):
@@ -1004,11 +1052,20 @@ def api_speak_custom():
         else:
             phoneme_repeat_audios.append(None)
 
+    # Build grapheme and IPA arrays
+    graphemes = split_graphemes(word)
+    phoneme_ipa = [ARPABET_TO_IPA.get(name, name) for name in phoneme_names]
+    # Pad graphemes to match phoneme count if needed, else truncate
+    while len(graphemes) < len(phoneme_names):
+        graphemes.append("?")
+    phoneme_graphemes = graphemes[:len(phoneme_names)]
+
     return jsonify({
         "word": word,
         "found": phonemes is not None,
         "phoneme_names": phoneme_names,
-        "phoneme_graphemes": phoneme_names,
+        "phoneme_ipa": phoneme_ipa,
+        "phoneme_graphemes": phoneme_graphemes,
         "phoneme_audios": phoneme_audios,
         "phoneme_repeat_audios": phoneme_repeat_audios,
         "tts_url": tts_url,

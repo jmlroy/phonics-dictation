@@ -894,14 +894,14 @@ async function readCustomWord() {
       data.phoneme_names.forEach((name, i) => {
         const box = document.createElement('div');
         box.className = 'phoneme-box';
-        box.style.cssText = 'display:inline-flex;flex-direction:column;align-items:center;background:#1e2d4a;border-radius:10px;padding:8px 14px;margin:4px;cursor:pointer;transition:all 0.15s;border:2px solid #2a2a4a';
-        const label = document.createElement('div');
-        label.style.cssText = 'font-size:11px;color:#888;margin-bottom:4px;text-transform:uppercase';
-        label.textContent = '/' + name + '/';
+        box.style.cssText = 'display:inline-flex;flex-direction:column;align-items:center;background:#1e2d4a;border-radius:10px;padding:8px 14px;margin:4px;cursor:pointer;transition:all 0.15s;border:2px solid #2a2a4a;min-width:50px';
+        const ipa = document.createElement('div');
+        ipa.style.cssText = 'font-size:14px;color:#a78bfa;margin-bottom:2px;font-family:\"Times New Roman\",serif';
+        ipa.textContent = data.phoneme_ipa && data.phoneme_ipa[i] ? '/' + data.phoneme_ipa[i] + '/' : '/' + name + '/';
         const sound = document.createElement('div');
-        sound.style.cssText = 'font-size:22px;font-weight:700;color:#a78bfa';
+        sound.style.cssText = 'font-size:24px;font-weight:700;color:#e0e0e0';
         sound.textContent = data.phoneme_graphemes && data.phoneme_graphemes[i] ? data.phoneme_graphemes[i] : '?';
-        box.appendChild(label);
+        box.appendChild(ipa);
         box.appendChild(sound);
         if (data.phoneme_audios[i]) {
           box.onclick = () => {
