@@ -16,7 +16,7 @@ import pronouncing
 
 VOLC_API_KEY = "7ac606a7-4e1f-4a0a-b0d4-6c7d45bd7ff4"
 TTS_URL = "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
-SPEAKER = "en_female_dacey_uranus_bigtts"
+SPEAKER = "en_female_myra_cmb_uranus_bigtts"
 
 def _speed_to_rate(ratio):
     return int((ratio - 1.0) * 100)
