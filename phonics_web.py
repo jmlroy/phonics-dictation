@@ -32,12 +32,12 @@ ARPABET_TO_WAV = {
     "AA": "AA_single.wav",
     "AE": "AE_single.wav",
     "AH": "AH_single.wav",
-    "AO": "AO.wav",
+    "AO": "AO_single.wav",
     "AR": "AR.wav",
     "AW": "AW_single.wav",
     "AY": "AY_single.wav",
     "B": "B_single.wav",
-    "CH": "CH.wav",
+    "CH": "CH_single.wav",
     "D": "D_single.wav",
     "DH": "DH_single.wav",
     "EH": "EH_single.wav",
@@ -45,57 +45,78 @@ ARPABET_TO_WAV = {
     "EY": "EY_single.wav",
     "F": "F_single.wav",
     "G": "G_single.wav",
-    "HH": "HH.wav",
+    "HH": "HH_single.wav",
     "IH": "IH_single.wav",
     "IY": "IY_single.wav",
-    "JH": "JH.wav",
+    "JH": "JH_single.wav",
     "K": "K_single.wav",
-    "KS": "KS.wav",
-    "KW": "KW.wav",
-    "L": "L.wav",
-    "M": "M.wav",
-    "N": "N.wav",
-    "NG": "NG.wav",
+    "KS": "KS_single.wav",
+    "KW": "KW_single.wav",
+    "L": "L_single.wav",
+    "M": "M_single.wav",
+    "N": "N_single.wav",
+    "NG": "NG_single.wav",
     "OW": "OW_single.wav",
     "OY": "OY_single.wav",
     "P": "P_single.wav",
-    "R": "R.wav",
-    "S": "S.wav",
-    "SH": "SH.wav",
+    "R": "R_single.wav",
+    "S": "S_single.wav",
+    "SH": "SH_single.wav",
     "T": "T_single.wav",
-    "TH": "TH.wav",
+    "TH": "TH_single.wav",
     "UH": "UH_single.wav",
     "UW": "UW_single.wav",
-    "V": "V.wav",
-    "W": "W.wav",
-    "WH": "WH.wav",
-    "Y": "Y.wav",
-    "Z": "Z.wav",
-    "ZH": "ZH.wav",
+    "V": "V_single.wav",
+    "W": "W_single.wav",
+    "WH": "WH_single.wav",
+    "Y": "Y_single.wav",
+    "Z": "Z_single.wav",
+    "ZH": "ZH_single.wav",
 }
 
 ARPABET_TO_WAV_REPEAT = {
     "AA": "AA_repeat.wav",
     "AE": "AE_repeat.wav",
     "AH": "AH_repeat.wav",
+    "AO": "AO_repeat.wav",
     "AW": "AW_repeat.wav",
     "AY": "AY_repeat.wav",
     "B": "B_repeat.wav",
+    "CH": "CH_repeat.wav",
     "D": "D_repeat.wav",
+    "DH": "DH_repeat.wav",
     "EH": "EH_repeat.wav",
     "ER": "ER_repeat.wav",
     "EY": "EY_repeat.wav",
     "F": "F_repeat.wav",
     "G": "G_repeat.wav",
+    "HH": "HH_repeat.wav",
     "IH": "IH_repeat.wav",
     "IY": "IY_repeat.wav",
+    "JH": "JH_repeat.wav",
     "K": "K_repeat.wav",
+    "KS": "KS_repeat.wav",
+    "KW": "KW_repeat.wav",
+    "L": "L_repeat.wav",
+    "M": "M_repeat.wav",
+    "N": "N_repeat.wav",
+    "NG": "NG_repeat.wav",
     "OW": "OW_repeat.wav",
     "OY": "OY_repeat.wav",
     "P": "P_repeat.wav",
+    "R": "R_repeat.wav",
+    "S": "S_repeat.wav",
+    "SH": "SH_repeat.wav",
     "T": "T_repeat.wav",
+    "TH": "TH_repeat.wav",
     "UH": "UH_repeat.wav",
     "UW": "UW_repeat.wav",
+    "V": "V_repeat.wav",
+    "W": "W_repeat.wav",
+    "WH": "WH_repeat.wav",
+    "Y": "Y_repeat.wav",
+    "Z": "Z_repeat.wav",
+    "ZH": "ZH_repeat.wav",
 }
 
 ARPABET_TO_ESPEAK = {
@@ -317,28 +338,52 @@ def get_phoneme_audio(arpabet_phoneme, repeat=False):
 # ── Word data ────────────────────────────────────────────────────────────────
 
 BEGINNER = [
+    # Short A (26)
     "cat","bat","hat","mat","rat","sat","fat","pat",
     "can","man","pan","fan","van","ran",
     "map","tap","nap","gap","bad","dad","pad","sad",
+    "ant","cab","cap","wag",
+    # Short E (18)
     "bed","red","fed","led","hen","pen","ten","men",
     "jet","net","pet","wet",
+    "egg","elk","peg","leg","web","den",
+    # Short I (24)
     "big","pig","dig","wig","bin","pin","tin","win",
     "fit","hit","sit","bit","lip","tip","rip","zip",
+    "kit","lid","six","mix","fix","fin","dip","yam",
+    # Short O (18)
     "dog","log","fog","hog","hop","mop","top","pop",
     "pot","hot","dot","not","box","fox",
+    "ox","rod","sob","job",
+    # Short U (19)
     "bug","jug","mug","rug","bus","cup","pup",
     "sun","run","fun","bun","hut","nut","cut",
-    "a","the","is","I","to","has","you",
+    "gum","mud","tub","bud","hum",
+    # Heart Words (28)
+    "a","the","is","i","to","has","you",
     "and","said","go","he","she","was",
     "they","are","have","do","of","for",
+    "we","my","all","her","his","put","say",
+    "why","yes",
+    # Extra CVC words (40)
+    "jam","yak","ram","bib","rib","kid",
+    "dim","him","sin","pit","mitt","nib",
+    "cob","cog","jog",
+    "vet","zoo","ax",
+    "elf","ink","cub","sub",
+    "mad","lad","bag","rag",
+    "tag","sap",
 ]
 
 INTERMEDIATE = [
+    # Blends (20)
     "mask","hand","flag","plan","flat","camp",
     "slip","spill","wind","swim","list","milk",
     "drop","frog","spot","pond","stop",
     "drum","plug","jump","hunt","dust",
     "tent","belt","nest","desk","step",
+    "blend","clap","crab","grab","skip","sled","snap","trap",
+    # Digraphs (30)
     "ship","shop","fish","shell","dish","cash","rush",
     "that","them","then","this","than",
     "thin","thick","bath","moth","path",
@@ -346,26 +391,46 @@ INTERMEDIATE = [
     "whip","whale","wheel","phone","photo","graph",
     "king","ring","wing","song","lung","bang",
     "sink","pink","tank","bank","wink","trunk",
+    "shut","wish","bush","chat","thud","whiz",
+    # FLSZ & ck (12)
     "cliff","puff","hill","bell","miss","buzz",
     "ball","tall","toll","bull","full",
     "duck","neck","lock","rock","sock","pick",
+    "back","pack","kick","luck",
+    # Silent e (24)
     "cake","lake","gate","cape","game","late","name",
     "kite","pine","bike","bite","line","lime","side",
     "bone","rope","home","nose","rose","joke","hope",
     "tube","mule","cute","flute","tune","rude",
+    "wide","dime","nine","pole","vote","woke",
+    # Soft c/g (12)
     "face","lace","rice","mice","nice","space","place",
     "cage","page","rage","huge","stage",
+    "gem","city","cent",
+    # Heart Words
     "there","their","where","what","why","who","when",
     "some","come","one","once","wash",
     "mother","father","give","live","done","gone",
+    # Extra blend/digraph words (40)
+    "cram","grim","prop","scan","skim","stun",
+    "twin","trim","swan","brim","grin","trot",
+    "club","glad","glum","plum","slid","slug","snip",
+    "stir","trip","twig",
+    "brick","clock","crack","dress","freck","press",
+    "stick","track","trick","twist","brand","spend",
+    "crisp","draft","frost","grunt","stamp","blast",
+    "trust","swept","clamp","crept",
 ]
 
 ADVANCED = [
+    # R-Controlled (18)
     "car","star","park","dark","yard","farm",
     "fork","storm","corn","more","shore",
     "her","sister","brother","dinner","tiger","paper",
     "bird","girl","dirt","shirt","fur","turn","burn",
     "word","world","work",
+    "card","hard","part","start","mark","bark",
+    # Vowel Teams (26)
     "rain","train","paint","play","day","clay",
     "tree","green","seat","beach","key","monkey",
     "boat","coat","road","snow","blow","toe",
@@ -375,47 +440,311 @@ ADVANCED = [
     "grew","flew","juice","fruit","blue","clue",
     "saw","straw","draw","haul","sauce","caught",
     "head","bread","heavy","sweat","water",
+    "stay","wait","mail","tail","main",
+    "seed","feed","need","keep","week",
+    # Diphthongs (22)
     "coin","point","soil","boy","toy","joy",
     "out","house","mouse","cow","town","brown",
+    "down","how","now","loud","cloud","round",
+    # Silent Letters (6)
     "knee","knit","write","wrong","lamb","comb",
+    "knock","knife","wrap",
+    # Suffixes & Affixes (15)
     "bigger","tallest","faster","slowly","softly",
     "helpful","playful","unhappy","rewrite","refill",
     "running","hopped","baked","dried","babies",
+    # Advanced Patterns (15)
     "action","station","picture","nature","mixture",
     "answer","neighbor","beautiful","thought","though",
     "could","should","would",
+    # Extra advanced words (35)
+    "teach","reach","beast","cream","dream","steam",
+    "cheap","clean","clear","bleed","creep","sweet",
+    "float","gloat","coast","toast","roast","boost",
+    "crowd","proud","shout","south","mouth","found",
+    "ground","sound","bound","count","mount",
+    "chair","stair","chain","brain","plain",
+]
+# ── Handwriting Stroke Data ────────────────────────────────────────────
+# Each letter has: group, uppercase version, strokes (normalized 0-100 grid)
+# stroke: [{x,y},...] sequence of points forming the pen path
+# type: "down"|"up"|"curve"|"circle"|"hook"
+
+# Handwriting groups (from Units 8-12)
+HANDWRITING_GROUPS = {
+    "straight_drops": {"name": "Straight Drops", "letters": ["l","t","i","j","u"]},
+    "bounce_backs": {"name": "Bounce-Backs", "letters": ["n","m","r","h","b","p"]},
+    "smooth_loops": {"name": "Smooth Loops", "letters": ["c","a","d","o","g","q"]},
+    "slanted_vectors": {"name": "Slanted Vectors", "letters": ["v","w","x","y","k"]},
+    "slippery_curves": {"name": "Slippery Curves", "letters": ["s","e","f","z"]},
+}
+
+# Stroke paths for each lowercase letter (normalized 0-100 grid)
+# Each stroke is an array of {x,y} waypoints
+HANDWRITING_STROKES = {
+    "a": {"group": "smooth_loops", "strokes": [
+        [{"x":50,"y":10},{"x":30,"y":20},{"x":20,"y":40},{"x":20,"y":60},{"x":30,"y":80},{"x":50,"y":90},{"x":70,"y":80},{"x":80,"y":60},{"x":80,"y":40},{"x":50,"y":40}],
+        [{"x":50,"y":40},{"x":50,"y":70},{"x":55,"y":80},{"x":60,"y":85},{"x":70,"y":80},{"x":80,"y":70}],
+    ]},
+    "b": {"group": "bounce_backs", "strokes": [
+        [{"x":30,"y":0},{"x":30,"y":40},{"x":30,"y":90},{"x":35,"y":95},{"x":40,"y":90}],
+        [{"x":30,"y":40},{"x":40,"y":20},{"x":60,"y":15},{"x":75,"y":25},{"x":80,"y":40},{"x":80,"y":60},{"x":75,"y":75},{"x":60,"y":85},{"x":40,"y":85},{"x":30,"y":80}],
+    ]},
+    "c": {"group": "smooth_loops", "strokes": [
+        [{"x":80,"y":20},{"x":60,"y":15},{"x":40,"y":25},{"x":25,"y":40},{"x":20,"y":60},{"x":25,"y":80},{"x":40,"y":90},{"x":60,"y":95},{"x":80,"y":90}],
+    ]},
+    "d": {"group": "smooth_loops", "strokes": [
+        [{"x":50,"y":10},{"x":70,"y":20},{"x":80,"y":40},{"x":85,"y":60},{"x":80,"y":80},{"x":65,"y":90},{"x":50,"y":95},{"x":35,"y":85},{"x":25,"y":70},{"x":25,"y":50},{"x":35,"y":35},{"x":50,"y":25}],
+        [{"x":50,"y":0},{"x":50,"y":25},{"x":55,"y":30}],
+    ]},
+    "e": {"group": "slippery_curves", "strokes": [
+        [{"x":80,"y":40},{"x":50,"y":35},{"x":30,"y":40},{"x":20,"y":55},{"x":25,"y":75},{"x":40,"y":88},{"x":60,"y":90},{"x":75,"y":85},{"x":80,"y":75}],
+        [{"x":80,"y":40},{"x":25,"y":55}],
+    ]},
+    "f": {"group": "slippery_curves", "strokes": [
+        [{"x":55,"y":0},{"x":55,"y":80}],
+        [{"x":35,"y":25},{"x":75,"y":25}],
+        [{"x":55,"y":80},{"x":45,"y":90},{"x":35,"y":93},{"x":25,"y":88}],
+    ]},
+    "g": {"group": "smooth_loops", "strokes": [
+        [{"x":45,"y":10},{"x":65,"y":18},{"x":75,"y":35},{"x":78,"y":55},{"x":70,"y":75},{"x":55,"y":85},{"x":40,"y":80},{"x":30,"y":65},{"x":28,"y":45},{"x":35,"y":28},{"x":50,"y":20}],
+        [{"x":50,"y":55},{"x":55,"y":85},{"x":60,"y":100},{"x":70,"y":110},{"x":85,"y":115}],
+    ]},
+    "h": {"group": "bounce_backs", "strokes": [
+        [{"x":25,"y":0},{"x":25,"y":90},{"x":30,"y":95},{"x":35,"y":90}],
+        [{"x":25,"y":40},{"x":45,"y":20},{"x":65,"y":15},{"x":78,"y":25},{"x":82,"y":45},{"x":80,"y":65},{"x":75,"y":80},{"x":65,"y":88},{"x":55,"y":85}],
+    ]},
+    "i": {"group": "straight_drops", "strokes": [
+        [{"x":50,"y":30},{"x":50,"y":90},{"x":52,"y":93}],
+        [{"x":47,"y":15},{"x":53,"y":15}],
+    ]},
+    "j": {"group": "straight_drops", "strokes": [
+        [{"x":65,"y":30},{"x":60,"y":80},{"x":55,"y":100},{"x":45,"y":110},{"x":30,"y":112}],
+        [{"x":62,"y":15},{"x":68,"y":15}],
+    ]},
+    "k": {"group": "slanted_vectors", "strokes": [
+        [{"x":30,"y":0},{"x":30,"y":90},{"x":32,"y":93}],
+        [{"x":30,"y":45},{"x":70,"y":20}],
+        [{"x":35,"y":50},{"x":70,"y":85}],
+    ]},
+    "l": {"group": "straight_drops", "strokes": [
+        [{"x":45,"y":0},{"x":45,"y":85},{"x":48,"y":92},{"x":55,"y":95}],
+        [{"x":40,"y":92},{"x":55,"y":95},{"x":60,"y":92}],
+    ]},
+    "m": {"group": "bounce_backs", "strokes": [
+        [{"x":15,"y":40},{"x":15,"y":85},{"x":18,"y":90},{"x":22,"y":88}],
+        [{"x":15,"y":40},{"x":25,"y":20},{"x":40,"y":15},{"x":50,"y":25},{"x":50,"y":60},{"x":48,"y":75},{"x":42,"y":85},{"x":35,"y":88}],
+        [{"x":50,"y":40},{"x":60,"y":20},{"x":75,"y":15},{"x":85,"y":25},{"x":85,"y":60},{"x":82,"y":75},{"x":75,"y":85},{"x":65,"y":88}],
+    ]},
+    "n": {"group": "bounce_backs", "strokes": [
+        [{"x":20,"y":40},{"x":20,"y":85},{"x":22,"y":90},{"x":26,"y":88}],
+        [{"x":20,"y":40},{"x":35,"y":20},{"x":55,"y":15},{"x":70,"y":25},{"x":78,"y":45},{"x":75,"y":65},{"x":68,"y":80},{"x":58,"y":88},{"x":48,"y":85}],
+    ]},
+    "o": {"group": "smooth_loops", "strokes": [
+        [{"x":50,"y":10},{"x":30,"y":20},{"x":20,"y":40},{"x":18,"y":60},{"x":25,"y":80},{"x":40,"y":92},{"x":60,"y":92},{"x":75,"y":80},{"x":82,"y":60},{"x":80,"y":40},{"x":70,"y":20},{"x":50,"y":10}],
+    ]},
+    "p": {"group": "bounce_backs", "strokes": [
+        [{"x":35,"y":20},{"x":35,"y":40},{"x":35,"y":95},{"x":37,"y":100},{"x":42,"y":98}],
+        [{"x":35,"y":40},{"x":45,"y":20},{"x":65,"y":15},{"x":80,"y":25},{"x":85,"y":45},{"x":80,"y":65},{"x":65,"y":78},{"x":45,"y":80},{"x":35,"y":75}],
+    ]},
+    "q": {"group": "smooth_loops", "strokes": [
+        [{"x":50,"y":10},{"x":30,"y":22},{"x":20,"y":45},{"x":22,"y":65},{"x":35,"y":80},{"x":55,"y":85},{"x":70,"y":75},{"x":78,"y":55},{"x":72,"y":35},{"x":58,"y":22},{"x":45,"y":25}],
+        [{"x":55,"y":55},{"x":65,"y":85},{"x":75,"y":100}],
+    ]},
+    "r": {"group": "bounce_backs", "strokes": [
+        [{"x":20,"y":40},{"x":20,"y":85},{"x":22,"y":90}],
+        [{"x":20,"y":40},{"x":40,"y":20},{"x":65,"y":18},{"x":78,"y":25},{"x":80,"y":35}],
+    ]},
+    "s": {"group": "slippery_curves", "strokes": [
+        [{"x":70,"y":20},{"x":50,"y":18},{"x":30,"y":25},{"x":22,"y":40},{"x":28,"y":55},{"x":50,"y":60},{"x":70,"y":65},{"x":78,"y":80},{"x":70,"y":92},{"x":50,"y":95},{"x":30,"y":90}],
+    ]},
+    "t": {"group": "straight_drops", "strokes": [
+        [{"x":50,"y":0},{"x":50,"y":85},{"x":48,"y":92}],
+        [{"x":30,"y":40},{"x":70,"y":40}],
+    ]},
+    "u": {"group": "straight_drops", "strokes": [
+        [{"x":25,"y":35},{"x":25,"y":75},{"x":30,"y":88},{"x":45,"y":95},{"x":65,"y":92},{"x":75,"y":80},{"x":78,"y":55}],
+        [{"x":75,"y":35},{"x":75,"y":55}],
+    ]},
+    "v": {"group": "slanted_vectors", "strokes": [
+        [{"x":20,"y":20},{"x":50,"y":85},{"x":52,"y":88}],
+        [{"x":50,"y":85},{"x":80,"y":20}],
+    ]},
+    "w": {"group": "slanted_vectors", "strokes": [
+        [{"x":15,"y":20},{"x":30,"y":85},{"x":35,"y":88}],
+        [{"x":30,"y":85},{"x":50,"y":20}],
+        [{"x":50,"y":20},{"x":70,"y":85},{"x":72,"y":88}],
+        [{"x":70,"y":85},{"x":85,"y":20}],
+    ]},
+    "x": {"group": "slanted_vectors", "strokes": [
+        [{"x":25,"y":15},{"x":75,"y":85}],
+        [{"x":75,"y":15},{"x":25,"y":85}],
+    ]},
+    "y": {"group": "slanted_vectors", "strokes": [
+        [{"x":25,"y":20},{"x":50,"y":60}],
+        [{"x":50,"y":60},{"x":75,"y":20}],
+        [{"x":50,"y":60},{"x":50,"y":95},{"x":45,"y":110},{"x":35,"y":115},{"x":25,"y":112}],
+    ]},
+    "z": {"group": "slippery_curves", "strokes": [
+        [{"x":75,"y":18},{"x":25,"y":18}],
+        [{"x":25,"y":18},{"x":75,"y":85}],
+        [{"x":75,"y":85},{"x":25,"y":85}],
+    ]},
+}
+
+# Uppercase versions (capital letters)
+HANDWRITING_UPPER = {
+    "a": "A","b":"B","c":"C","d":"D","e":"E","f":"F","g":"G",
+    "h":"H","i":"I","j":"J","k":"K","l":"L","m":"M","n":"N",
+    "o":"O","p":"P","q":"Q","r":"R","s":"S","t":"T","u":"U",
+    "v":"V","w":"W","x":"X","y":"Y","z":"Z",
+}
+
+# ── UFLI-inspired Learn Curriculum ──
+# Each lesson introduces letters, then CVC words using those letters, then heart words.
+# Letter → ARPABET mapping for phoneme sound audio
+LETTER_PHONEME = {
+    "a":"AE","b":"B","c":"K","d":"D","e":"EH","f":"F","g":"G",
+    "h":"HH","i":"IH","j":"JH","k":"K","l":"L","m":"M","n":"N",
+    "o":"AA","p":"P","q":"KW","r":"R","s":"S","t":"T","u":"AH",
+    "v":"V","w":"W","x":"KS","y":"Y","z":"Z",
+}
+
+# Speech recognition: what we expect when child says the PHONEME sound (not letter name)
+# Key is the letter, value is a list of possible speech-rec text matches
+PHONEME_SPEECH_MAP = {
+    "a":["a","ah","aa","uh"], "b":["b","buh","buhh"], "c":["k","kuh","c","cuh"],
+    "d":["d","duh","dduh"], "e":["e","eh","euh"], "f":["f","ff","fff","fuh"],
+    "g":["g","guh","gg"], "h":["h","hh","huh","hhu"], "i":["i","ih","iih"],
+    "j":["j","juh","jj"], "k":["k","kuh","c","ck"], "l":["l","ll","luh","el"],
+    "m":["m","mm","mmm","um","muh"], "n":["n","nn","nnn","un","nuh"],
+    "o":["o","ah","aw","aa","oah"], "p":["p","puh","pp"],
+    "q":["kw","qu","k","q"], "r":["r","rr","rrr","er","ruh"],
+    "s":["s","ss","sss","ess","suh"], "t":["t","tuh","tt"],
+    "u":["u","uh","uu","uuh"], "v":["v","vv","vvv","vuh"],
+    "w":["w","ww","www","wuh"], "x":["ks","kss","x","xx","zz"],
+    "y":["y","yy","yuh"], "z":["z","zz","zzz","zed"],
+}
+# Letter name recognition (for detecting wrong answers)
+LETTER_NAME_SPEECH = {
+    "a":["ay","aye","aei"],"b":["be","bee","bea"],"c":["se","see","sea","cee"],
+    "d":["de","dee","dea"],"e":["ee","e"],"f":["ef","effe"],"g":["je","gee","jea"],
+    "h":["aitch","eitch","haitch"],"i":["eye","aye"],"j":["jay","jae","jei"],
+    "k":["kay","kei","cay"],"l":["el","ell","ele"],"m":["em","emm","eme"],
+    "n":["en","enn","ene"],"o":["oh","ow","o"],"p":["pee","pe"],"q":["cue","kyu","q"],
+    "r":["ar","are","arr"],"s":["ess","es","ces"],"t":["tee","te"],"u":["you","yew","u"],
+    "v":["vee","ve"],"w":["double-u","doubleyou","dabelyu"],"x":["ex","eks","x"],
+    "y":["why","wye","wy"],"z":["zed","zee","z"],
+}
+
+# UFLI-based Learn Curriculum: lessons, each with letters + CVC words + heart words
+LEARN_LESSONS = [
+    # ── Unit 1: a m s t ──
+    {"id": "l1", "name": "a m s t",
+     "letters": ["a","m","s","t"],
+     "cvc_words": ["am","at","mat","sat","tam","sam"],
+     "heart_words": ["a"]},
+
+    # ── Unit 2: p f i n ──
+    {"id": "l2", "name": "p f i n",
+     "letters": ["p","f","i","n"],
+     "cvc_words": ["sit","fit","fin","pin","pan","tan","tin","map","tap","nap","pit","pat","fat","fan","sip","nip","tip"],
+     "heart_words": ["the","is"]},
+
+    # ── Unit 3: c o d u ──
+    {"id": "l3", "name": "c o d u",
+     "letters": ["c","o","d","u"],
+     "cvc_words": ["cod","cot","cat","cap","cup","pup","cop","cut","dad","did","dip","mop","top","mud","sun","sad"],
+     "heart_words": ["i","to","has","you"]},
+
+    # ── Unit 4: g b e k ──
+    {"id": "l4", "name": "g b e k",
+     "letters": ["g","b","e","k"],
+     "cvc_words": ["big","bid","kid","kit","bag","pen","pet","net","ten","gum","pig","bed","bus","dog"],
+     "heart_words": ["and","said","go"]},
+
+    # ── Unit 5: h r l w ──
+    {"id": "l5", "name": "h r l w",
+     "letters": ["h","r","l","w"],
+     "cvc_words": ["hat","rat","red","led","leg","log","lug","wig","win","hen","hug","hop","run","rug","rot","lap","lip","wet","web"],
+     "heart_words": ["he","she","was"]},
+
+    # ── Unit 6: j y v ──
+    {"id": "l6", "name": "j y v",
+     "letters": ["j","y","v"],
+     "cvc_words": ["jam","jet","yet","yak","yam","wet","vet","van","fan","fin"],
+     "heart_words": ["they","are","have"]},
+
+    # ── Unit 7: x qu z ──
+    {"id": "l7", "name": "x qu z",
+     "letters": ["x","q","z"],
+     "cvc_words": ["tax","wax","mix","fix","fox","box","quiz","quit","zip","zap","wet"],
+     "heart_words": ["of","for","my"]},
+
+    # ── Unit 8: Handwriting — Straight Drops (l t i j u) ──
+    {"id": "l8", "name": "Straight Drops l t i j u",
+     "letters": ["l","t","i","j","u"],
+     "cvc_words": ["lit","fit","lip","lid","led","jet","jug","jut","ill","bill","hill","mill","pill","till","fill"],
+     "heart_words": ["see","to"]},
+
+    # ── Unit 9: Handwriting — Bounce-Backs (n m r h b p) ──
+    {"id": "l9", "name": "Bounce-Backs n m r h b p",
+     "letters": ["n","m","r","h","b","p"],
+     "cvc_words": ["pan","pin","pen","hen","hug","rug","run","bun","bin","bit","man","fan","sun","map"],
+     "heart_words": ["you","and","said","go","has"]},
+
+    # ── Unit 10: Handwriting — Smooth Loops (c a d o g qu) ──
+    {"id": "l10", "name": "Smooth Loops c a d o g qu",
+     "letters": ["c","a","d","o","g","q"],
+     "cvc_words": ["cat","cot","cod","dog","bog","bag","tag","cab","dad","sad","mad","bad","hag"],
+     "heart_words": ["he","she","was","they","are"]},
+
+    # ── Unit 11: Handwriting — Slanted Vectors (v w x y k) ──
+    {"id": "l11", "name": "Slanted Vectors v w x y k",
+     "letters": ["v","w","x","y","k"],
+     "cvc_words": ["van","wet","wig","win","mix","fix","fox","box","yak","kid","kit"],
+     "heart_words": ["have","of","for","my"]},
+
+    # ── Unit 12: Handwriting — Slippery Curves (s e f z) ──
+    {"id": "l12", "name": "Slippery Curves s e f z",
+     "letters": ["s","e","f","z"],
+     "cvc_words": ["sun","sat","sit","fit","fed","net","wet","zip","zap","quiz","quit"],
+     "heart_words": ["the","is","a","i","to","you","and","said","go","he","she","was","they","are","have","of","for","my"]},
 ]
 
 LEVELS = {
     "1": {"name": "Beginner", "subtitle": "Alphabet & CVC Basics",
           "words": BEGINNER,
           "subs": [
-              {"id": "1a", "name": "Short A", "words_idx": [0,23]},
-              {"id": "1b", "name": "Short E", "words_idx": [24,35]},
-              {"id": "1c", "name": "Short I", "words_idx": [36,51]},
-              {"id": "1d", "name": "Short O", "words_idx": [52,65]},
-              {"id": "1e", "name": "Short U", "words_idx": [66,79]},
-              {"id": "1f", "name": "Heart Words", "words_idx": [80,97]},
+              {"id": "1a", "name": "Short A", "words_idx": [0,25]},
+              {"id": "1b", "name": "Short E", "words_idx": [26,43]},
+              {"id": "1c", "name": "Short I", "words_idx": [44,67]},
+              {"id": "1d", "name": "Short O", "words_idx": [68,85]},
+              {"id": "1e", "name": "Short U", "words_idx": [86,104]},
+              {"id": "1f", "name": "Heart Words", "words_idx": [105,132]},
+              {"id": "1g", "name": "More CVC", "words_idx": [133,174]},
           ]},
     "2": {"name": "Intermediate", "subtitle": "Blends, Digraphs & Silent E",
           "words": INTERMEDIATE,
           "subs": [
-              {"id": "2a", "name": "Blends", "words_idx": [0,14]},
-              {"id": "2b", "name": "Digraphs", "words_idx": [15,44]},
-              {"id": "2c", "name": "FLSZ & ck", "words_idx": [45,57]},
-              {"id": "2d", "name": "Silent e", "words_idx": [58,81]},
-              {"id": "2e", "name": "Soft c/g", "words_idx": [82,93]},
-              {"id": "2f", "name": "Heart Words", "words_idx": [94,106]},
+              {"id": "2a", "name": "Blends", "words_idx": [0,27]},
+              {"id": "2b", "name": "Digraphs", "words_idx": [28,57]},
+              {"id": "2c", "name": "FLSZ & ck", "words_idx": [58,79]},
+              {"id": "2d", "name": "Silent e", "words_idx": [80,107]},
+              {"id": "2e", "name": "Soft c/g", "words_idx": [108,120]},
+              {"id": "2f", "name": "Heart Words", "words_idx": [121,134]},
+              {"id": "2g", "name": "More Blends", "words_idx": [135,182]},
           ]},
     "3": {"name": "Advanced", "subtitle": "R-Controlled, Vowels & Morphology",
           "words": ADVANCED,
           "subs": [
-              {"id": "3a", "name": "R-Controlled", "words_idx": [0,18]},
-              {"id": "3b", "name": "Vowel Teams", "words_idx": [19,44]},
-              {"id": "3c", "name": "Diphthongs", "words_idx": [45,66]},
-              {"id": "3d", "name": "Silent Letters", "words_idx": [67,74]},
-              {"id": "3e", "name": "Suffixes & Affixes", "words_idx": [75,89]},
-              {"id": "3f", "name": "Advanced Patterns", "words_idx": [90,104]},
+              {"id": "3a", "name": "R-Controlled", "words_idx": [0,31]},
+              {"id": "3b", "name": "Vowel Teams", "words_idx": [32,94]},
+              {"id": "3c", "name": "Diphthongs", "words_idx": [95,112]},
+              {"id": "3d", "name": "Silent Letters", "words_idx": [113,121]},
+              {"id": "3e", "name": "Suffixes & Affixes", "words_idx": [122,136]},
+              {"id": "3f", "name": "Advanced Patterns", "words_idx": [137,149]},
+              {"id": "3g", "name": "More Advanced", "words_idx": [150,184]},
           ]},
 }
 
@@ -1158,6 +1487,154 @@ def api_minimal_pairs_category(category):
     pairs = list(cat["pairs"])
     random.shuffle(pairs)
     return jsonify({"name": cat["name"], "pairs": pairs[:20]})
+
+
+# ── Learn Section API ─────────────────────────────────────────────────────
+
+@app.route("/api/learn/lessons", methods=["GET"])
+def api_learn_lessons():
+    """Return the full curriculum of learn lessons."""
+    lessons = []
+    for l in LEARN_LESSONS:
+        lessons.append({
+            "id": l["id"],
+            "name": l["name"],
+            "letters": l["letters"],
+            "letter_phonemes": [LETTER_PHONEME.get(c, "") for c in l["letters"]],
+            "cvc_count": len(l["cvc_words"]),
+            "heart_count": len(l["heart_words"]),
+        })
+    return jsonify(lessons)
+
+
+@app.route("/api/learn/lesson/<lesson_id>", methods=["GET"])
+def api_learn_lesson(lesson_id):
+    """Return full lesson data including all practice words with phonemes."""
+    lesson = None
+    for l in LEARN_LESSONS:
+        if l["id"] == lesson_id:
+            lesson = l
+            break
+    if not lesson:
+        return jsonify({"error": "Lesson not found"}), 404
+
+    # Build CVC word data with phonemes
+    cvc_data = []
+    for w in lesson["cvc_words"]:
+        phonemes = get_phoneme_list(w)
+        names = [p for _, p in phonemes] if phonemes else []
+        audios = []
+        for _, arp in (phonemes or []):
+            audio_path, fmt = get_phoneme_audio(arp)
+            if audio_path:
+                if audio_path.startswith(tempfile.gettempdir()):
+                    cache_name = f"espeak_{hashlib.md5(audio_path.encode()).hexdigest()}.wav"
+                    cache_path = os.path.join(TTS_CACHE_DIR, cache_name)
+                    if not os.path.exists(cache_path):
+                        shutil.copy2(audio_path, cache_path)
+                    audios.append(f"/tts_cache/{cache_name}")
+                else:
+                    audios.append(f"/phonemes/{os.path.basename(audio_path)}")
+            else:
+                audios.append(None)
+
+        tts_path, tts_ok = get_tts_audio(w, 1.0)
+        tts_url = f"/tts_cache/{os.path.basename(tts_path)}" if tts_ok else None
+
+        cvc_data.append({
+            "word": w,
+            "phonemes": names,
+            "phoneme_audios": audios,
+            "tts_url": tts_url,
+        })
+
+    # Letter audio URLs
+    letter_data = []
+    for ch in lesson["letters"]:
+        arp = LETTER_PHONEME.get(ch, "")
+        audio_path, fmt = get_phoneme_audio(arp)
+        audio_url = None
+        if audio_path:
+            if audio_path.startswith(tempfile.gettempdir()):
+                cache_name = f"espeak_{hashlib.md5(audio_path.encode()).hexdigest()}.wav"
+                cache_path = os.path.join(TTS_CACHE_DIR, cache_name)
+                if not os.path.exists(cache_path):
+                    shutil.copy2(audio_path, cache_path)
+                audio_url = f"/tts_cache/{cache_name}"
+            else:
+                audio_url = f"/phonemes/{os.path.basename(audio_path)}"
+        # Also get repeat version
+        repeat_path, repeat_fmt = get_phoneme_audio(arp, repeat=True)
+        repeat_url = None
+        if repeat_path:
+            if repeat_path.startswith(tempfile.gettempdir()):
+                cache_name = f"espeak_{hashlib.md5(repeat_path.encode()).hexdigest()}.wav"
+                cache_path = os.path.join(TTS_CACHE_DIR, cache_name)
+                if not os.path.exists(cache_path):
+                    shutil.copy2(repeat_path, cache_path)
+                repeat_url = f"/tts_cache/{cache_name}"
+            else:
+                repeat_url = f"/phonemes/{os.path.basename(repeat_path)}"
+
+        letter_data.append({
+            "letter": ch,
+            "phoneme": arp,
+            "audio_url": audio_url,
+            "repeat_url": repeat_url,
+            "expected_speech": PHONEME_SPEECH_MAP.get(ch, []),
+            "letter_name_speech": LETTER_NAME_SPEECH.get(ch, []),
+        })
+
+    # Heart word data
+    heart_data = []
+    for w in lesson["heart_words"]:
+        tts_path, tts_ok = get_tts_audio(w, 1.0)
+        tts_url = f"/tts_cache/{os.path.basename(tts_path)}" if tts_ok else None
+        heart_data.append({"word": w, "tts_url": tts_url})
+
+    return jsonify({
+        "id": lesson["id"],
+        "name": lesson["name"],
+        "letters": letter_data,
+        "cvc_words": cvc_data,
+        "heart_words": heart_data,
+    })
+
+
+# ── Handwriting API ──
+
+@app.route("/api/handwriting/letters", methods=["GET"])
+def api_handwriting_letters():
+    """Return handwriting stroke data for all lowercase letters."""
+    result = {}
+    for letter, data in HANDWRITING_STROKES.items():
+        result[letter] = {
+            "group": data["group"],
+            "group_name": HANDWRITING_GROUPS.get(data["group"], {}).get("name", ""),
+            "strokes": data["strokes"],
+            "uppercase": HANDWRITING_UPPER.get(letter, letter.upper()),
+        }
+    return jsonify(result)
+
+
+@app.route("/api/handwriting/groups", methods=["GET"])
+def api_handwriting_groups():
+    """Return handwriting groups with their letters."""
+    result = {}
+    for gid, gdata in HANDWRITING_GROUPS.items():
+        result[gid] = {
+            "name": gdata["name"],
+            "letters": gdata["letters"],
+        }
+    return jsonify(result)
+
+
+# ── Adventure Mode ──
+
+@app.route("/adventure")
+def adventure_mode():
+    """Serve the quest-based monster adventure version."""
+    return send_from_directory(os.path.dirname(os.path.abspath(__file__)), "phonics_web_adventure.html")
 
 
 # ── Main ───────────────────────────────────────────────────────────────────
