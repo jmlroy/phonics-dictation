@@ -286,7 +286,7 @@ def get_tts_audio(word, speed=1.0):
     else:
         speech_rate = int((speed - 1.0) * 100)
 
-    key = hashlib.md5(f"{word}:{speech_rate}".encode()).hexdigest()
+    key = hashlib.md5(f"{word}:{speech_rate}:{SPEAKER}".encode()).hexdigest()
     path = os.path.join(TTS_CACHE_DIR, f"{key}.mp3")
     if os.path.exists(path):
         return path, True
